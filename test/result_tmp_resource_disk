@@ -1,0 +1,88 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 디스크 사용</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>파일시스템</th>
+<th>마운트</th>
+<th>총</th>
+<th>사용</th>
+<th>사용량%</th>
+</tr>
+<tr>
+<td>/dev/sda5</td>
+<td>/</td>
+<td>9.5G</td>
+<td>764M</td>
+<td>9%</td>
+</tr>
+<tr>
+<td>tmpfs</td>
+<td>/dev/shm</td>
+<td>7.8G</td>
+<td>16K</td>
+<td>1%</td>
+</tr>
+<tr>
+<td>/dev/sda1</td>
+<td>/boot</td>
+<td>190M</td>
+<td>91M</td>
+<td>51%</td>
+</tr>
+<tr>
+<td>/dev/sda2</td>
+<td>/data</td>
+<td>96G</td>
+<td>1.2G</td>
+<td>2%</td>
+</tr>
+<tr>
+<td>/dev/sda9</td>
+<td>/home</td>
+<td>260G</td>
+<td>46G</td>
+<td>19%</td>
+</tr>
+<tr>
+<td>/dev/sda7</td>
+<td>/tmp</td>
+<td>4.7G</td>
+<td>10M</td>
+<td>1%</td>
+</tr>
+<tr>
+<td>/dev/sda3</td>
+<td>/usr</td>
+<td>29G</td>
+<td>14G</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>/dev/sda6</td>
+<td>/var</td>
+<td>9.5G</td>
+<td>556M</td>
+<td>7%</td>
+</tr>
+<tr>
+<td>/dev/sdb1</td>
+<td>/local_backup</td>
+<td>364G</td>
+<td>65G</td>
+<td>19%</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

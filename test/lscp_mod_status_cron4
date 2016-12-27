@@ -1,0 +1,8 @@
+합계 28
+-rwxr-xr-x. 1 root root  206 2014-10-30 18:12 logrotate
+-rwx------  1 root root  180 2003-07-10 04:36 logrotate.rpmnew
+-rwxr-xr-x. 1 root root  905 2013-02-22 11:13 makewhatis.cron
+-rwx------  1 root root  189 2015-01-26 19:48 mlocate.cron
+-rwxr-xr-x. 1 root root 2126 2013-07-19 23:35 prelink
+-rwxr-xr-x. 1 root root  563 2013-11-23 22:52 readahead.cron
+-rwxr-xr-x  1 root root  433 2015-11-07 03:34 tmpwatch

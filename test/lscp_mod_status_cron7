@@ -1,0 +1,7 @@
+합계 24
+-rw-r--r--  1 root root 113 2016-08-24 03:36 0hourly
+-rw-r--r--  1 root root  60 2016-08-08 18:54 lscp
+-rw-r--r--  1 root root 139 2016-05-11 17:17 mrtg
+-rw-------  1 root root 108 2016-06-22 00:41 raid-check
+-rw-r--r--. 1 root root 459 2013-12-05 22:35 sa-update
+-rw-------  1 root root 235 2016-05-11 11:02 sysstat

@@ -1,0 +1,142 @@
+#!/bin/bash
+
+# lscp_mod_firewall -- firewall check (lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/firewall.html"
+result_tmp_file="$tst_dir/result_tmp_firewall"
+
+sys_file1="$syslog_dir/lscp_mod_firewall_iptables"
+sys_file2="$syslog_dir/lscp_mod_firewall_hosts.deny"
+sys_file3="$syslog_dir/lscp_mod_firewall_hosts.allow"
+
+tst_file1="$tst_dir/lscp_mod_firewall_iptables"
+tst_file2="$tst_dir/lscp_mod_firewall_hosts.deny"
+tst_file3="$tst_dir/lscp_mod_firewall_hosts.allow"
+tst_filet="$tst_dir/lscp_mod_firewall_tmp"
+
+
+case $option in 
+      "--init") #Initializaion
+	#save iptables rules 
+	iptables -nL > $sys_file1
+
+	#save hosts.deny
+	cat /etc/hosts.deny | grep -v "^#" > $sys_file2
+
+	#save hosts.allow
+	cat /etc/hosts.allow | grep -v "^#" > $sys_file3
+
+	exit 0
+	;;
+
+      "--test") #Test
+        exit 2
+	;;
+
+      "--check") #System check  (daily)
+	# run head fill
+	$bin_dir/lscp_html_head contents $"firewall" $"Firewall setting of LSCP" $"Iptables, tcpwrapper..."> $result_file_html1
+
+	#save iptables rules 
+	iptables -nL > $tst_file1
+	contents_box_start $"Iptables rules" > $result_tmp_file
+	cat_web $tst_file1>> $result_tmp_file
+	diff_web $tst_file1 $sys_file1 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $"Firewall rules modified." >> $file_error_report
+          func_err_msg $" Firewall rules modified." | tee -a $file_error_report >> $result_tmp_file
+          cat $tst_filet | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_filet" ] ; then
+	contents_box_end >> $result_tmp_file
+
+	#save hosts.deny
+	cat /etc/hosts.deny | grep -v "^#" > $tst_file2
+	contents_box_start $"Tcpwrapper (hosts.deny)" >> $result_tmp_file
+	cat_web $tst_file2>> $result_tmp_file
+	diff_web $tst_file2 $sys_file2 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+ 	  error_occur=1
+          func_err_report_title $"Tcpwrapper rules modified." >> $file_error_report
+          func_err_msg $" Tcpwrapper rules modified." | tee -a $file_error_report >> $result_tmp_file
+          cat $tst_filet | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_filet" ] ; then
+	contents_box_end >> $result_tmp_file
+
+	#save hosts.allow
+	cat /etc/hosts.allow | grep -v "^#" > $tst_file3
+	contents_box_start $"Tcpwrapper (hosts.allow)" >> $result_tmp_file
+	cat_web $tst_file3>> $result_tmp_file
+	diff_web $tst_file2 $sys_file2 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $"Tcpwrapper (hosts.allow) rules modified." >> $file_error_report
+          func_err_msg $" Tcpwrapper (hosts.allow) rules modified." | tee -a $file_error_report >> $result_tmp_file
+          cat $tst_filet | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_filet" ] ; then
+	contents_box_end >> $result_tmp_file
+
+	cat $result_tmp_file >> $result_file_html1
+
+	$bin_dir/lscp_html_tail  contents  >> $result_file_html1
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	fi
+	if [ "$error_occur" == "1" ] ; then exit 4 ; else exit 0 ; fi
+	;;
+
+      "--report") #System check (monthly)
+	echo "<table style='border-top: 0px;border-left:0px;'><tr style='border-right: 0px;border-bottom:0px;'><TD width=50 style='border-right: 0px;border-bottom:0px;'></td><td style='border-right: 0px;border-bottom:0px;'>" >> $result_report
+	echo $"<H3> 3.2.1. Iptables rules </H3>" >> $result_report
+	cat $result_tmp_file >> $result_report
+	echo "</td></tr></table>" >> $result_report
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac

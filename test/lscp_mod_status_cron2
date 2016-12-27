@@ -1,0 +1,15 @@
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+HOME=/
+
+
+
+01 00 * * * root rdate -su time.bora.net | clock -w
+
+00 10 * * * root /usr/bin/trash-empty 3
+00 10 * * * root su -l bb -c /usr/bin/trash-empty 1
+
+0 09 * * * root /usr/local/lscp/bin/getLSCPReport.sh
+
+5 09 * * * root /usr/local/src/netdata/netdata-updater.sh -f

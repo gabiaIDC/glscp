@@ -1,0 +1,12 @@
+cat $1 2>/dev/null| grep -v "^#" | awk -v ServerRoot=$2 -v bin_dir="$3" '{
+  if($1=="ServerRoot") ServerRoot=$2;
+  if($1=="CustomLog" || $1=="ErrorLog"){
+   if($2!~"^/") print ServerRoot"/"$2;
+   else print $2;
+  }
+  if($1=="Include"){ 
+    if($2!~"^/")tmp=sprintf("%s/%s",ServerRoot,$2);
+    else tmp=$2;
+    system(sprintf("%s/get_httpd_logfiles %s %s %s 2>/dev/null",bin_dir,tmp,ServerRoot,bin_dir));
+  }
+}'

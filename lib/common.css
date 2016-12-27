@@ -1,0 +1,64 @@
+body,table,caption,tr,td,th,div {
+	font-family: "돋움", "굴림", Arial, sans-serif;
+	font-size:12px;
+	}
+body {
+	margin-top: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
+	}
+table {
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	border-collapse: collapse;
+	}
+
+caption {
+	color: #FFFFFF;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-size:15px;
+	font-weight:bold;
+	border-left: 1px solid #999;
+	border-top: 1px solid #999;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+	background-color : #8888FF;
+	}
+tr, td {
+	padding: 3px;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+	font-size:12px;
+	color:000000;
+	}
+th	{
+	padding: 5px;
+	background: #ccc;
+	color:000000;
+	font-size:13px;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+	}		
+
+ul 	{
+	list-style-image: none;
+	margin:2px;
+	margin-left:12px;
+	margin-right:0px;
+	padding: 5;
+	list-style-type: none;
+	}
+li	{
+	list-style: none;
+	background: url(http://image.suidc.com/menu_icon.png) no-repeat 0 50%;
+	padding-left: 12px;
+	font-size:13px;
+	color:000000;
+	font-weight:bold;
+	}
+
+  A:link { text-decoration:none; color: '#00448B';}
+  A:visited { text-decoration:none; color: green;}
+  A:active { text-decoration:underline; color:red ;}
+  A:hover {color: black; text-decoration:underline;}

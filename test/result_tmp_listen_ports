@@ -1,0 +1,162 @@
+<table style='border-top: 0px;border-left:0px;'><tr valign=top style='border-right: 0px;border-bottom:0px;'><TD width=180 style='border-right: 0px;border-bottom:0px;'>
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 열린(리스닝하는) 포트 (netstat)</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>열린포트</th>
+</tr>
+<tr>
+<td>0.0.0.0:19999</td>
+</tr>
+<tr>
+<td>0.0.0.0:993</td>
+</tr>
+<tr>
+<td>0.0.0.0:995</td>
+</tr>
+<tr>
+<td>127.0.0.1:199</td>
+</tr>
+<tr>
+<td>0.0.0.0:3306</td>
+</tr>
+<tr>
+<td>0.0.0.0:110</td>
+</tr>
+<tr>
+<td>0.0.0.0:143</td>
+</tr>
+<tr>
+<td>0.0.0.0:21</td>
+</tr>
+<tr>
+<td>0.0.0.0:22</td>
+</tr>
+<tr>
+<td>0.0.0.0:25</td>
+</tr>
+<tr>
+<td>:::19999</td>
+</tr>
+<tr>
+<td>:::993</td>
+</tr>
+<tr>
+<td>:::995</td>
+</tr>
+<tr>
+<td>:::873</td>
+</tr>
+<tr>
+<td>:::110</td>
+</tr>
+<tr>
+<td>:::143</td>
+</tr>
+<tr>
+<td>:::80</td>
+</tr>
+<tr>
+<td>:::22</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+</TD><TD style='border-right: 0px;border-bottom:0px;'>
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 열린(리스닝하는) 포트 (lsof)</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>프로세스</th>
+<th>사용자</th>
+<th>프로토콜</th>
+<th>열린포트</th>
+</tr>
+<tr>
+<td>dovecot</td>
+<td>root</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>httpd</td>
+<td>nobody</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>httpd</td>
+<td>root</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>mysqld</td>
+<td>mysql</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>netdata</td>
+<td>netdata</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>sendmail</td>
+<td>root</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>snmpd</td>
+<td>root</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>sshd</td>
+<td>root</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>vsftpd</td>
+<td>root</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>xinetd</td>
+<td>root</td>
+<td>0t0</td>
+<td>TCP</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+</td></tr></table>

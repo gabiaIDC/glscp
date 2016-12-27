@@ -1,0 +1,34 @@
+init-+-abrt-dump-oops
+     |-abrtd
+     |-crond-+-crond---sh---lscp_cron---lscp_mod_proces---pstree
+     |       |-crond-+-sendmail
+     |       |       `-su---GetMinuteData.p
+     |       `-crond-+-sendmail
+     |               `-sh---GetLowData.php
+     |-dovecot-+-anvil
+     |         |-config
+     |         `-log
+     |-httpd---10*[httpd]
+     |-irqbalance
+     |-login---bash---telnet
+     |-5*[mingetty]
+     |-33*[mrtg]
+     |-mysqld_safe---mysqld---10*[{mysqld}]
+     |-netdata-+-apps.plugin
+     |         |-bash
+     |         |-python---{python}
+     |         `-9*[{netdata}]
+     |-nslcd---5*[{nslcd}]
+     |-ntpd
+     |-perl---check.sh---mtr
+     |-3*[python---{python}]
+     |-rsyslogd---4*[{rsyslogd}]
+     |-salt-minion-+-salt-minion
+     |             `-2*[{salt-minion}]
+     |-saslauthd---4*[saslauthd]
+     |-2*[sendmail]
+     |-snmpd
+     |-sshd
+     |-udevd
+     |-vsftpd
+     `-xinetd

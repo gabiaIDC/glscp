@@ -1,0 +1,44 @@
+#!/bin/bash
+
+
+type="$1"
+name="$2"
+title="$3"
+etcs="$4"
+mail="$5"
+
+echo "<html>"
+if [ "$mail" != "" ] ; then 
+  echo ' <head>
+ <link rel="stylesheet" type="text/css" href="http://lscp.sulinux.net/css/common.css">
+'
+else
+echo ' <head>
+ <link rel="stylesheet" type="text/css" href="../common.css">
+'
+fi # end of if [ "$mail" != "" ] ; then
+echo "   <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$CHARSET\">"
+echo "<title> $HOSTNAME LSCP </title>"
+echo "</head>"
+echo "<body bgcolor=white>"
+
+if [ "$type" == "contents" ] ; then 
+  echo "
+	<table width=100% height=100%>
+  	  <tr>
+  "
+  if [ "$mail" != "" ] ; then 
+    echo "    	    <td background=http://lscp.sulinux.net/images/title_bg.gif width=\"100%\" height=80>"
+  else
+    echo "    	    <td background=images/title_bg.gif width=\"100%\" height=80>"
+  fi # end of if [ "$mail" != "" ] ; then
+  echo "
+      	      <font size=4 color=#0767a8 ><b>$title</b></font><br>
+      	      <div bgcolor=#F4F4F4><font color=#5b666e> $etcs </font></div>
+    	    </td>
+  	  </tr>
+  	  <tr>
+    	    <td valign=top>
+		  <!-- lscp contents start -->
+   "
+fi # if [ "$type" == "contents" ] ; then

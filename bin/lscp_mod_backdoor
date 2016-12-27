@@ -1,0 +1,138 @@
+#!/bin/bash
+
+# lscp_mod_backdoor -- Backdoor check (lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/backdoor.html"
+
+sys_file1="$syslog_dir/lscp_mod_backdoor_dev_files"
+sys_file2="$syslog_dir/lscp_mod_backdoor_SetUGids_files"
+sys_file3="$syslog_dir/lscp_mod_backdoor_sticky_dirs"
+
+tst_file1="$tst_dir/lscp_mod_backdoor_dev_files"
+tst_file2="$tst_dir/lscp_mod_backdoor_SetUGids_files"
+tst_file3="$tst_dir/lscp_mod_backdoor_sticky_dirs"
+tst_filet="$tst_dir/lscp_mod_backdoor_tmp"
+
+
+case $option in 
+      "--init") #Initializaion
+	# /dev/ directory, check if you have a list of common file storage
+	find /dev -type f -exec ls -l  --time-style=long-iso {} \; 2>/dev/null| grep -v "/dev/.udev/" | awk '{print $8" "$5}'> $sys_file1
+	# root owns SetUid, SetGid file search the list archive
+	find / -not -path  "/proc/*"  -a -not -path  "/sys/*" -a -not -path  "/var/named/chroot/proc/*" -type f \( \( -user root -a -perm -4000 \) -o \( -group root -a -perm -2000 \) \) -exec ls -al  --time-style=long-iso {} \; 2>/dev/null \
+	  | awk '{print $8" "$5}'  > $sys_file2
+	# Bulleted list search directory sticky bit
+	find / -not -path  "/proc/*"  -a -not -path  "/sys/*" -a -not -path  "/var/named/chroot/proc/*" -type d \( -perm -1000 \) 2>/dev/null > $sys_file3
+	;;
+
+      "--test") #Test
+	exit 2
+	;;
+
+      "--check") #System check  (daily)
+	# run head fil
+	$bin_dir/lscp_html_head contents $"backdoor" $"Check backdoors of LSCP" $"find /dev directory, find setuid, setgid, sticky bit .. " > $result_file_html1
+	
+	# check /dev directory
+	find /dev -type f -exec ls -l --time-style=long-iso {} \; 2>/dev/null| grep -v "/dev/.udev/" | awk '{print $8" "$5}'> $tst_file1
+        contents_box_start $"check /dev/ directory" >> $result_file_html1
+	draw_html_table $"Filename Size" $tst_file1 >> $result_file_html1
+	diff_web $tst_file1 $sys_file1 > $tst_filet
+	if [ -s "$tst_filet" ] ; then 
+	  error_occur=1
+          func_err_report_title $"Backdoor suspicious file found." >> $file_error_report
+          func_err_msg $" Backdoor suspicious file found." | tee -a $file_error_report >> $result_file_html1
+	  cat $tst_filet | tee -a $file_error_report >> $result_file_html1
+	fi # if [ -s "$tst_filet" ] ; then
+        contents_box_end >> $result_file_html1
+
+	# check setuid, setgid 
+	find / -not -path  "/proc/*"  -a -not -path  "/sys/*" -a -not -path  "/var/named/chroot/proc/*" -type f \( \( -user root -a -perm -4000 \) -o \( -group root -a -perm -2000 \) \) -exec ls -al --time-style=long-iso {} \; 2>/dev/null \
+	  | awk '{print $8" "$5}'  > $tst_file2
+        contents_box_start $"check root owned setuid, setgid files" >> $result_file_html1
+	draw_html_table $"Filename Size" $tst_file2 >> $result_file_html1
+	diff_web $tst_file2 $sys_file2 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $"root owned setuid, setgid files found." >> $file_error_report
+          func_err_msg $" root owned setuid, setgid files found." | tee -a $file_error_report >> $result_file_html1
+          cat $tst_filet | tee -a $file_error_report >> $result_file_html1
+        fi # if [ -s "$tst_filet" ] ; then
+        contents_box_end >> $result_file_html1
+
+	
+	# Bulleted list search directory sticky bit
+	find / -not -path  "/proc/*"  -a -not -path  "/sys/*" -a -not -path  "/var/named/chroot/proc/*" -type d \( -perm -1000 \) 2>/dev/null > $tst_file3
+        contents_box_start $"check sticky bit directory" >> $result_file_html1
+	draw_html_table $"Filename" $tst_file3 >> $result_file_html1
+	diff_web $tst_file3 $sys_file3 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $"Sticky bit directory added." >> $file_error_report
+          func_err_msg $" Sticky bit directory added." | tee -a $file_error_report >> $result_file_html1
+          cat $tst_filet | tee -a $file_error_report >> $result_file_html1
+        fi # if [ -s "$tst_filet" ] ; then
+        contents_box_end >> $result_file_html1
+
+	$bin_dir/lscp_html_tail contents >> $result_file_html1
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	fi
+	if [ "$error_occur" == "1" ] ; then exit 4 ; else exit 0 ; fi
+	;;
+
+      "--report") #System check (monthly)
+	exit 2
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+

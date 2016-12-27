@@ -1,0 +1,117 @@
+#!/bin/bash
+
+# lscp_mod_status_mailqueue -- mail queue check (lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/status_mailqueue.html"
+result_tmp_file="$tst_dir/result_tmp_mailqueue"
+
+tst_file1="$tst_dir/lscp_mod_status_mailqueue"
+tst_file2="$tst_dir/lscp_mod_status_mailmqueue"
+
+
+case $option in 
+      "--init") #Initializaion
+        exit 2
+	;;
+
+      "--test") #Test
+        exit 2
+	;;
+
+      "--check") #System check  (daily)
+	# run head file
+	$bin_dir/lscp_html_head contents $"status_mailqueue" $"Check mail queue of LSCP" $"Check sendmail mail queues.."> $result_file_html1
+	
+	# check mail queue
+	ls -l /var/spool/mqueue/ 2>/dev/null| wc -l > $tst_file1
+        contents_box_start $"check mailqueue" > $result_tmp_file
+	draw_html_table $"Count" $tst_file1 >> $result_tmp_file
+	if [ "`cat $tst_file1|wc -l`" -ge "$conf_max_mailqueue_count" ] ; then 
+	      error_occur=1
+	      func_err_report_title $"A lot of mailqueue(mqueue) files!" >> $file_error_report
+              func_err_msg $" A lot of mailqueue(mqueue) files!" | tee -a $file_error_report >> $result_tmp_file
+	      draw_html_table $"Count" $tst_file1 >> $file_error_report
+        fi
+        contents_box_end >> $result_tmp_file
+
+
+	ls -l /var/spool/clientmqueue/ 2> /dev/null | wc -l > $tst_file2
+        contents_box_start $"check clientmqueue" >> $result_tmp_file
+	draw_html_table $"Count" $tst_file2 >> $result_tmp_file
+	if [ "`cat $tst_file2|wc -l`" -ge "$conf_max_mailqueue_count" ] ; then 
+	      error_occur=1
+	      func_err_report_title $"A lot of mailqueue(clientmqueue) files!" >> $file_error_report
+              func_err_msg $" A lot of mailqueue(clientmqueue) files!" | tee -a $file_error_report >> $result_tmp_file
+	      draw_html_table $"Count" $tst_file2 >> $file_error_report
+        fi
+        contents_box_end >> $result_tmp_file
+	cat $result_tmp_file >> $result_file_html1
+  	$bin_dir/lscp_html_tail contents >> $result_file_html1
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	fi
+	if [ "error_occur" == "1" ] ; then exit 4 ; else exit 0 ; fi
+	;;
+
+      "--report") #System check (monthly)
+	cat $result_tmp_file >> $result_report
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+
+
+
+
+
+
+
+

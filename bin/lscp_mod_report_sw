@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# lscp_mod_report_sw -- the spec of the software. (lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+case $option in 
+      "--init") #Initializaion
+        exit 2
+	;;
+
+      "--test") #Test
+        exit 2
+	;;
+
+      "--check") #System check  (daily)
+        exit 3
+	;;
+
+      "--report") #System check (monthly)
+	echo "<font size=3>" >> $result_report
+         echo -n $"&nbsp &nbsp &nbsp &nbsp &nbsp <B> - OS : </B> "  >> $result_report
+         func_getOSInfo >> $result_report
+         echo -n $"<BR>&nbsp &nbsp &nbsp &nbsp &nbsp <B> - WEB : </B> "  >> $result_report
+         func_getWEBInfo  >> $result_report
+         echo -n $"<BR>&nbsp &nbsp &nbsp &nbsp &nbsp <B> - DB : </B> "  >> $result_report
+         func_getDBInfo  >> $result_report
+	echo "</font><br><br>" >> $result_report
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_report 
+	fi
+
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --report --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+
+
+

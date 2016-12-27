@@ -1,0 +1,423 @@
+#!/bin/bash
+
+# lscp_cron -- run program.
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+
+# chracter set
+localedef -f UTF-8 -i ko_KR ko_KR.UTF-8
+export LANG=ko_KR.utf8
+export LC_ALL=ko_KR.utf8
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+ minute="`date '+%M'`" # %M   minute (00..59)
+ hour="`date '+%H'`" # %H   hour (00..23)
+ day="`date '+%d'`" # %d   days (00..)
+
+ str_monthly_report=$"Monthly Report"
+ msg_monthly_report=$"If you want to see Monthly reports, run the following command.<br><b>cd $bin_dir<br>./lscp_cron --report</b>"
+ str_check_item=$"Check Items"
+ msg_check_item=$"If you want to see Check items, run the following command.<br><b>cd $bin_dir<br>./lscp_cron --check</b>"
+ str_check_history=$"Check History"
+
+# read options 
+option="$1"
+ # options = [--check|--report]
+
+## Create result dirs and make index.html
+if [ ! -d $rst_today_html_dir ] ; then
+  mkdir -p $rst_today_html_dir
+  ## create index.html
+     echo "
+        <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\"http://www.w3.org/TR/html4/loose.dtd\">
+        <html>
+          <head>
+            <title>LSCP Check Results</title>
+                <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$CHARSET\">
+          </head>
+             <frameset rows=\"85px,*\" FRAMEBORDER=NO noresize border=0>
+                <frame NAME=title width=700 height=527 SRC=\"lscp-title.html\"> 
+                <frameset cols=\"220px,*\" FRAMEBORDER=NO noresize border=0>
+                  <frameset rows=\"450px,200px,*\" FRAMEBORDER=NO noresize border=0>
+                    <frame NAME=items width=260 height=510 SRC=day_check_$today/item.html noresize>
+                    <frame NAME=list width=260 height=100 SRC=list.html noresize>
+                    <frame NAME=list width=260 height=100 SRC=monthly.html noresize>
+                  </frameset>
+                  <frame NAME=contents width=700 height=527 SRC=day_check_$today/resource_graph.html>
+                </frameset>
+             </frameset>
+        </html>
+	" > $rst_html_dir/index.html
+	chown netdata.netdata $rst_html_dir/index.html
+
+  if [ ! -f $rst_html_dir/open-flash-chart.swf ] ; then
+	cp $INST_DIR/lib/open-flash-chart.swf $rst_html_dir
+	cp $INST_DIR/lib/common.css $rst_html_dir
+	cp -pR $INST_DIR/lib/images $rst_html_dir
+	cp -pR $INST_DIR/lib/js $rst_html_dir
+	chown netdata.netdata $rst_html_dir -R
+  fi
+
+  if [ ! -f $rst_html_dir/lscp-title.html ] ; then
+     echo "
+	<style type='text/css'>
+	body {
+        	margin-top: 0px;
+        	margin-left: 0px;
+        	margin-right: 0px;
+        	margin-bottom: 0px;
+        }
+	</style>
+	<html>
+ 	   <body>
+	      <table border=0 CELLPADDING=0 CELLSPACING=0 width=100% height=100% background=images/title_bg.gif > 
+  		<tr>
+     		  <td width=80% height=100%>&nbsp;&nbsp; <img src=images/LSCP-logo.jpg> </td>
+     		  <td width=20% height=100%><font color=#0767A8>
+                     <a href='https://sourceforge.net/projects/lscp/files/Document/08.User_manual-0.2.KO.pdf/download' target=_blank> HELP </a>| 
+		     <a target=_blank href='https://sourceforge.net/projects/lscp/'>LSCP project home </a></font>
+                  </td>     
+  		</tr>
+	      </table> 
+	   </body>
+	</html>
+	" > $rst_html_dir/lscp-title.html
+	chown netdata.netdata $rst_html_dir/lscp-title.html
+   fi # if [ ! -f $rst_html_dir/lscp-title.html ] ; then
+
+
+
+
+   ## Create daily check list
+   $bin_dir/lscp_html_head1 list > $rst_html_dir/list.html
+   cnt_list=`ls -tl $rst_html_dir/| grep " day_check_" | grep "^d"| sed "s/day_check_//g"|wc -l`
+   echo "
+        <table border=0 CELLPADDING=0, CELLSPACING=0> 
+          <tr>
+           <td colspan=2>
+            <script>
+                function click_menu(menuid,url){
+                  for(i=1;i<=$cnt_list;i++){
+                    document.getElementById('menu'+i).style.backgroundImage = '';
+                    document.getElementById('menu'+i).style.color = '#5b666e';
+                  }
+                  document.getElementById(menuid).style.backgroundImage = 'url(images/list_checked.png)'; 
+                  document.getElementById(menuid).style.color = '#FFFFFF'; 
+                  parent.frames[1].location.href = url;
+                }
+            </script>
+            <table>
+              <tr>
+                <td background=images/titleBar.png width=200 height=30><font color=#FFFFFF>$str_check_history</font></td>
+              </tr>
+   ">> $rst_html_dir/list.html
+
+   ls -tl $rst_html_dir/| grep " day_check_" | grep "^d"| sed "s/day_check_//g" | awk \
+    '{
+        if(NR==1)printf("<tr><td id=menu%s  background=images/list_checked.png onclick=\"click_menu(\047menu%s\047,\047%s\047)\" style=\"cursor:pointer;\">%s</td></tr>\n",NR,NR,"day_check_"$8"/item.html",$8);
+        else printf("<tr><td id=menu%s  background=images/list.png onclick=\"click_menu(\047menu%s\047,\047%s\047)\" style=\"cursor:pointer;\">%s</td></tr>\n",NR,NR,"day_check_"$8"/item.html",$8);
+      }' >> $rst_html_dir/list.html
+
+   echo "
+	    </table>
+           </td>
+         </tr>
+        </table>
+   ">> $rst_html_dir/list.html
+   $bin_dir/lscp_html_tail list >> $rst_html_dir/list.html
+   chown netdata.netdata $rst_html_dir/list.html
+
+   # Create initial page
+   if [ ! -s "$rst_today_html_dir/item.html" ] ; then 
+     $bin_dir/lscp_html_head list > $rst_today_html_dir/item.html
+     echo "
+        <table border=0 CELLPADDING=0, CELLSPACING=0> 
+          <tr>
+            <td colspan=2>
+                <table>
+                  <tr>
+                    <td background=../images/titleBar.png width=200 height=30><font color=#FFFFFF>$str_check_item</font></td
+>
+                  </tr>
+                  <tr><td background=../images/list.png width=200>$msg_check_item</td>
+		  </tr>
+                </table>
+            </td>
+          </tr>
+        </table> 
+     " >> $rst_today_html_dir/item.html 
+     $bin_dir/lscp_html_tail list >> $rst_today_html_dir/item.html
+     chown netdata.netdata $rst_today_html_dir/item.html
+   fi
+ 
+   # Report initial page
+   if [ ! -s "$rst_html_dir/monthly.html" ] ; then 
+     $bin_dir/lscp_html_head1 list > $rst_html_dir/monthly.html
+     echo "
+        <table border=0 CELLPADDING=0, CELLSPACING=0> 
+          <tr>
+            <td colspan=2>
+                <table>
+                  <tr>
+                    <td background=images/titleBar.png width=200 height=30><font color=#FFFFFF>$str_monthly_report</font></td
+>
+                  </tr>
+                  <tr><td background=images/list.png width=200>$msg_monthly_report</td>
+		  </tr>
+                </table>
+            </td>
+          </tr>
+        </table> 
+     " >> $rst_html_dir/monthly.html 
+     $bin_dir/lscp_html_tail list >> $rst_html_dir/monthly.html
+     chown netdata.netdata $rst_html_dir/monthly.html
+   fi
+fi  # end of if [ ! -d $rst_today_html_dir ] ; then
+
+
+## Invoke programs
+ ## Every 5 minutes
+ # run each modules 
+if [ "$option" == "" ] ; then 
+   i=0
+   for module in $conf_lscp_modules ; do 
+      i=$(($i+1))
+      echo -n $"$i.  Testing lscp_mod_$module ..... "
+      $bin_dir/lscp_mod_$module  --test
+	 case $? in
+	  0) ## Success
+	     echo -e $"\t$green[  OK  ]$white"
+	     ;;
+	  1) ## Fail
+	     echo -e $"\t$red[ FAIL ]$white"
+	     ;;
+      	  2) # Nothing to do
+	     echo -e $"\t$blue[ Nothing to do ]$white"
+             ;;
+	 esac
+	
+   done
+   chown netdata.netdata $rst_today_html_dir -R
+fi # end of if [ "$option" == "" ] ; then
+
+
+
+
+ ######## Check ... ########
+ # run each modules 
+   if [ "$hour:$minute" == "$conf_check_time" -o "$option" == "--check" ] ; then 
+      # clear tmp files
+      rm -f $file_error_report_cnt $file_error_report 2> /dev/null
+
+      $bin_dir/lscp_html_head list > $rst_today_html_dir/item.html
+      echo "
+	<table border=0 CELLPADDING=0, CELLSPACING=0> 
+  	  <tr>
+      	    <td colspan=2>
+		<table>
+  		  <tr>
+       		    <td background=../images/titleBar.png width=200 height=30><font color=#FFFFFF>$str_check_item</font></td>
+  		  </tr>
+      " >> $rst_today_html_dir/item.html
+      cnt_items=0 ; i=0
+      for module in $conf_lscp_modules ; do 
+	 contain_error=0
+         cnt_items=$((cnt_items+1)) ; i=$((i+1))
+         echo -n $"$i.  Checking lscp_mod_$module ..... "
+         $bin_dir/lscp_mod_$module  --check
+
+	 case $? in
+	  0) ## Success
+	     echo -e $"\t$green[  OK  ]$white"
+	     ;;
+	  1) ## Fail
+	     echo -e $"\t$red[ FAIL ]$white"
+	     ;;
+      	  2) # Nothing to do
+	     echo -e $"\t$blue[ Nothing to do ]$white"
+             ;;
+      	  3) # Don't create menu
+	     echo -e $"\t$blue[ Dont't create menu ]$white"
+	     cnt_items=$((cnt_items-1))
+	     continue
+             ;;
+      	  4) # Contain Error result
+	     echo -e $"\t$green[ Contain error result ]$white"
+	     contain_error=1
+             ;;
+
+	 esac
+	 echo "<tr><td id=menu$cnt_items background=../images/list.png width=200  onclick=\"click_menu('menu$cnt_items','$module.html')\" style=\"cursor:pointer;\" >" >> $rst_today_html_dir/item.html
+	 if [ "$contain_error" == "1" ] ; then 
+	      echo "<b>$cnt_items. $module</b>" >> $rst_today_html_dir/item.html
+	 else
+	      echo "$cnt_items. $module" >> $rst_today_html_dir/item.html
+	 fi
+	 echo "</td></tr>" >> $rst_today_html_dir/item.html
+      done
+      echo "
+		</table>
+            </td>
+          </tr>
+        </table>
+ <script>
+   function click_menu(menuid,url){
+      for(i=1;i<=$cnt_items;i++){
+        document.getElementById('menu'+i).style.backgroundImage = '';
+        document.getElementById('menu'+i).style.color = '#5b666e';
+      }
+      document.getElementById(menuid).style.backgroundImage = 'url(../images/list_checked.png)'; 
+      document.getElementById(menuid).style.color = '#FFFFFF'; 
+      parent.frames[4].location.href = url;
+   }
+ </script>
+      " >> $rst_today_html_dir/item.html
+      $bin_dir/lscp_html_tail list >> $rst_today_html_dir/item.html
+      chown netdata.netdata $rst_today_html_dir -R
+
+
+	dirlists=`/bin/ls -t $rst_html_dir/ | grep " day_check_"  2>/dev/null`
+	if [ -d $rst_html_dir ] ; then 
+   	   i=1
+   	   for dir in $dirlists ; do
+      	      if [ "$i" -gt $conf_archive_period ] ; then
+        	 /bin/rm -rf "$rst_html_dir/$dir"
+      	      fi
+      	      i=$(($i+1))
+    	   done
+	fi
+   fi
+
+
+ ######## Create Report ########
+ # run each modules 
+   if [ "$day $hour:$minute" == "01 00:05" -o "$option" == "--report" ] ; then 
+      if [ ! -d $rst_month_html_dir ] ; then 
+	mkdir -p $rst_month_html_dir
+	chown netdata.netdata $rst_month_html_dir -R
+      fi
+
+      ## 0. contents head
+      $bin_dir/lscp_html_head contents $"report" $"System Monthly Report. ($tomonth)" $"Report system status using the collected monthly data...<br> Hostname : $HOSTNAME"> $result_report
+
+
+
+        i=0
+	## 1. System information
+	echo $"<H1>&nbsp;1. System information</H1>" >> $result_report
+
+        ##   1.1. Hardware
+	echo $"<H2> &nbsp; &nbsp; 1.1. Hardware information</H2>" >> $result_report
+	 module="report_hw" ; i=$(($i+1))
+	 func_report_module_run $i $module
+
+        ##   1.2. Software
+	echo $"<H2> &nbsp; &nbsp; 1.2. Software information</H2>" >> $result_report
+	 module="report_sw" ; i=$(($i+1))
+	 func_report_module_run $i $module
+
+        ##   1.3. Network
+	echo $"<H2> &nbsp; &nbsp; 1.3. Network information</H2>" >> $result_report
+	 module="report_net" ; i=$(($i+1))
+	 func_report_module_run $i $module
+
+	## 2. System resource report
+	echo $"<BR><H1>&nbsp;2. System resource report</H1>" >> $result_report
+	 module="resource_graph" ; i=$(($i+1))
+	 func_report_module_run $i $module
+        ##   2.1. Load Average
+        ##   2.2. Load
+        ##   2.3. Process counter
+        ##   2.4. Network Traffic
+        ##   2.5. Memory useage
+
+	##   2.6. Disk useage
+	echo $"<H2> &nbsp; &nbsp; 2.1. Disk useage</H2>" >> $result_report
+	 module="resource_disk" ; i=$(($i+1))
+	 func_report_module_run $i $module
+
+	## 3. System status
+	echo $"<BR><H1>&nbsp;3. System status</H1>" >> $result_report
+
+	## 3.1. Check the users
+	echo $"<H2> &nbsp; &nbsp; 3.1. Check the status</H2>" >> $result_report
+	 module="report_etc" ; i=$(($i+1))
+	 func_report_module_run $i $module
+
+	echo $"<H2> &nbsp; &nbsp; 3.2. Check the users</H2>" >> $result_report
+	 module="status_users" ; i=$(($i+1))
+	 func_report_module_run $i $module
+
+
+	### not implementation this version
+	## 3. System security report
+	##echo $"<BR><H1>&nbsp;3. System security report</H1>" >> $result_report
+        ##   3.1. Check the Listen Port
+        ##   3.2. Check the Firewall(Iptables)
+        ##   3.3. Logined users history
+        ##   3.4. Check the user security
+        ##   3.5. Check the backdoors
+        ##   3.6. Check the rootkit via chkrootkit
+        ##   3.7. Check the initscripts
+        ##   3.8. Check the running process
+        ##   3.9. Check the modified system files
+
+	## 4. System status
+	## 4.1. Check the users
+	## 4.2. Check the big files
+	## 4.3. Check the cron
+	## 4.4. Check the logfils
+	## 4.5. Check the mailqueus
+
+## module names : resource_graph resource_disk backdoor listen_ports firewall status_bigfiles status_mailqueue status_cron status_users process chkrootkit modify_files init_scripts system_files users login_users resource_version status_logfiles error_report report_hw report_sw report_etc
+	
+      $bin_dir/lscp_html_tail contents >> $result_report 
+
+
+     ## Create monthly report list
+     $bin_dir/lscp_html_head1 list > $rst_html_dir/monthly.html
+     cnt_list=`ls -tl $rst_html_dir/| grep " report_" | grep "^d"| sed "s/report_//g"|wc -l`
+   echo "
+        <table border=0 CELLPADDING=0, CELLSPACING=0> 
+          <tr>
+           <td colspan=2>
+            <table>
+              <tr>
+                <td background=images/titleBar.png width=200 height=30><font color=#FFFFFF>$str_monthly_report</font></td>
+              </tr>
+   ">> $rst_html_dir/monthly.html
+
+   ls -tl $rst_html_dir/| grep " report_" | grep "^d"| sed "s/report_//g" | awk \
+     '{
+        printf("<tr><td background=images/list.png><a target=_blank href=\"%s\">%s</a></td></tr>\n","report_"$8"/report.html",$8);
+      }' >> $rst_html_dir/monthly.html
+
+   echo "
+	    </table>
+           </td>
+         </tr>
+        </table>
+   ">> $rst_html_dir/monthly.html
+   $bin_dir/lscp_html_tail list >> $rst_html_dir/monthly.html
+   chown netdata.netdata $rst_html_dir/monthly.html
+   chown netdata.netdata $rst_month_html_dir -R
+
+   fi

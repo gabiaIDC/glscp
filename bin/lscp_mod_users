@@ -1,0 +1,186 @@
+#!/bin/bash
+
+# lscp_mod_users -- check user security(lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/users.html"
+result_tmp_file="$tst_dir/result_tmp_users"
+
+#sys_file1="$syslog_dir/lscp_mod_users1"
+#sys_file2="$syslog_dir/lscp_mod_users2"
+#sys_file3="$syslog_dir/lscp_mod_users3"
+#sys_file4="$syslog_dir/lscp_mod_users4"
+tst_file1="$tst_dir/lscp_mod_users1"
+tst_file2="$tst_dir/lscp_mod_users2"
+tst_file3="$tst_dir/lscp_mod_users3"
+tst_file4="$tst_dir/lscp_mod_users4"
+tst_file5="$tst_dir/lscp_mod_users5"
+tst_file6="$tst_dir/lscp_mod_users6"
+
+
+case $option in 
+      "--init") #Initializaion
+        exit 2
+	;;
+
+      "--test") #Test
+        exit 2
+	;;
+
+      "--check") #System check  (daily)
+	# run head file
+	$bin_dir/lscp_html_head contents $"users" $"Check user security of LSCP" $"Check UID,GID, home directory ..."> $result_file_html1
+
+
+	# 1. Check UID, GID
+        contents_box_start $"Check UID, GID" > $result_tmp_file
+	  cat /etc/passwd | grep  -w 0 | grep -vw  ^root | sed "s/:/ /g" > $tst_file1
+	  draw_html_table $"User x UID GID Name HomeDir Shell" $tst_file1 >> $result_tmp_file
+        contents_box_end >> $result_tmp_file
+
+
+	# 2. Check user's home directory permissions
+        contents_box_start $"Check user's home directory permissions" >> $result_tmp_file
+          cat /etc/passwd | awk -F: '{
+      	     if($3>=500 && $3<65533 && system(sprintf("test -d %s",$6))==0){
+        	tmp=sprintf("find %s -maxdepth 0 -printf \"        %m %p\\n\"| grep -v 701",$6);
+        	system(tmp);
+	     }
+    	  }' > $tst_file2
+	  draw_html_table $"Permission HomeDirectory" $tst_file2 >> $result_tmp_file
+        contents_box_end >> $result_tmp_file
+
+
+	# 3. Check File(.bashrc, .bash_logout, .bashrc)Permission(if writeable by other users)
+        contents_box_start $"Check File(.bashrc, .bash_logout, .bashrc) Permission(if writeable by other users)" >> $result_tmp_file
+	cat /etc/passwd | awk -F: '{
+      	  file=".bashrc";
+      	  if(system(sprintf("test -f %s/%s",$6,file))==0){
+            tmp=sprintf("ls -l %s/%s | grep \"w- \"| grep \"wx \"",$6,file);
+            system(tmp);
+          }
+
+      	  file=".bash_logout";
+      	  if(system(sprintf("test -f %s/%s",$6,file))==0){
+            tmp=sprintf("ls -l %s/%s | grep \"w- \"| grep \"wx \"",$6,file);
+            system(tmp);
+          }
+
+      	  file=".bashrc";
+       	  if(system(sprintf("test -f %s/%s",$6,file))==0){
+            tmp=sprintf("ls -l %s/%s | grep \"w- \"| grep \"wx \"",$6,file);
+            system(tmp);
+      	  }
+        }' > $tst_file3
+        if [ -s "$tst_file3" ] ; then
+	  error_occur=1
+          func_err_report_title $"User file(writeable by other users) found." >> $file_error_report
+          func_err_msg $" User file(writeable by other users) found." | tee -a $file_error_report >> $result_tmp_file
+	draw_html_table $"Permission Link Owner Group Size(KByte) Date Day Time Filename" $tst_file3 >> $result_tmp_file  | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_file3" ] ; then
+
+	
+        contents_box_end >> $result_tmp_file
+
+
+	# 4. Check of .bash_history file size 0.
+        contents_box_start $"Check of .bash_history file size 0" >> $result_tmp_file
+    	  cat /etc/passwd | awk -F: '{
+      	    file=".bash_history";
+       	     if(system(sprintf("test -f %s/%s -a ! -s %s/%s",$6,file,$6,file))==0){
+        	tmp=sprintf("ls -l %s/%s",$6,file);
+        	system(tmp);
+      	     }
+    	    }'> $tst_file4
+        if [ -s "$tst_file4" ] ; then
+	  error_occur=1
+          func_err_report_title $"Zero .bash_history(file size 0) found." >> $file_error_report
+          func_err_msg $" Zero .bash_history(file size 0) found." | tee -a $file_error_report >> $result_tmp_file
+	draw_html_table $"Permission Link Owner Group Size(KByte) Date Day Time Filename" $tst_file4 >> $result_tmp_file  | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_file4" ] ; then
+        contents_box_end >> $result_tmp_file
+
+
+	# 5. .rhosts file for each account, whether in the home directory is checked.
+        contents_box_start $"Check of .rhosts file in the home directory" >> $result_tmp_file
+    	  cat /etc/passwd | awk -F: '{
+      	    file=".rhosts";
+      	    if(system(sprintf("test -f %s/%s",$6,file))==0){
+        	tmp=sprintf("ls -l %s/%s ",$6,file);
+        	system(tmp);
+      	    }
+    	  }' > $tst_file5
+        if [ -s "$tst_file5" ] ; then
+	  error_occur=1
+          func_err_report_title $".rhosts files found." >> $file_error_report
+          func_err_msg $" .rhosts files found." | tee -a $file_error_report >> $result_tmp_file
+	draw_html_table $"Permission Link Owner Group Size(KByte) Date Day Time Filename" $tst_file5 >> $result_tmp_file  | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_file5" ] ; then
+        contents_box_end >> $result_tmp_file
+
+	cat $result_tmp_file >> $result_file_html1
+	$bin_dir/lscp_html_tail contents >> $result_file_html1
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	fi
+	if [ "$error_occur" == "1" ] ; then exit 4 ; else exit 0 ; fi
+	;;
+
+      "--report") #System check (monthly)
+        contents_box_start $"Check UID, GID" >> $result_report
+	  cat /etc/login.defs  | grep "^PASS_MAX_DAYS" > $tst_file6
+	  draw_html_table $"Title Days" $tst_file1 >> $result_report
+        contents_box_end >> $result_report
+	cat $result_tmp_file >> $result_report
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+

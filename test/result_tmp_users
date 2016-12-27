@@ -1,0 +1,141 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 사용자 UID, GID점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>계정명</th>
+<th>x</th>
+<th>UID</th>
+<th>GID</th>
+<th>이름</th>
+<th>홈디렉토리</th>
+<th>쉘</th>
+</tr>
+<tr>
+<td>sync</td>
+<td>x</td>
+<td align=right>5</td>
+<td align=right>0</td>
+<td>sync</td>
+<td>/sbin</td>
+<td>/bin/sync</td>
+</tr>
+<tr>
+<td>shutdown</td>
+<td>x</td>
+<td align=right>6</td>
+<td align=right>0</td>
+<td>shutdown</td>
+<td>/sbin</td>
+<td>/sbin/shutdown</td>
+</tr>
+<tr>
+<td>halt</td>
+<td>x</td>
+<td align=right>7</td>
+<td align=right>0</td>
+<td>halt</td>
+<td>/sbin</td>
+<td>/sbin/halt</td>
+</tr>
+<tr>
+<td>operator</td>
+<td>x</td>
+<td align=right>11</td>
+<td align=right>0</td>
+<td>operator</td>
+<td>/root</td>
+<td>/sbin/nologin</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 사용자 홈디렉토리 퍼미션 확인</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>퍼미션</th>
+<th>홈디렉토리</th>
+</tr>
+<tr>
+<td align=right>777</td>
+<td>/home/bb</td>
+</tr>
+<tr>
+<td align=right>755</td>
+<td>/home/mysql</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 사용자 로그인 스크립트 퍼미션 점검(다른 사용자가 쓸수 있는지 점검) </font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA>  .bash_history 파일 사이즈 0 인것 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 사용자 홈디렉토리에 .rhosts파일이 있는지 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

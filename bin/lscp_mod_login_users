@@ -1,0 +1,134 @@
+#!/bin/bash
+
+# lscp_mod_login_users -- check login users(lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/login_users.html"
+result_tmp_file="$tst_dir/result_tmp_login_users"
+
+#sys_file1="$syslog_dir/lscp_mod_users1"
+#sys_file2="$syslog_dir/lscp_mod_users2"
+#sys_file3="$syslog_dir/lscp_mod_users3"
+#sys_file4="$syslog_dir/lscp_mod_users4"
+tst_file1="$tst_dir/lscp_mod_login_users1"
+tst_file2="$tst_dir/lscp_mod_login_users2"
+tst_file3="$tst_dir/lscp_mod_login_users3"
+tst_file4="$tst_dir/lscp_mod_login_users4"
+tst_file5="$tst_dir/lscp_mod_login_users5"
+
+
+case $option in 
+      "--init") #Initializaion
+        exit 2
+	;;
+
+      "--test") #Test
+        exit 2
+	;;
+
+      "--check") #System check  (daily)
+	# run head file
+	$bin_dir/lscp_html_head contents $"login_users" $"Check login user security of LSCP" $"Check connected users, connect user..."> $result_file_html1
+
+
+	# 1. Check connected users(to month).
+        contents_box_start $"Check connected users(last)" > $result_tmp_file
+	  last | grep `LANG=en;date '+%b'`| grep -v ^reboot | grep -v ftpd | grep -v "wtmp begin"| awk '{
+            s[0]=substr($0,1,8);
+            s[1]=substr($0,10,11);
+            s[2]=substr($0,23,16); 
+            s[3]=substr($0,40,25); 
+            s[4]=substr($0,66,7); 
+            print s[0]" "s[1]" "s[2]" "s[3]" "s[4];
+          }'> $tst_file1
+	  draw_html_table $"User Method IP Week Month Day Time - Time Spent" $tst_file1 >> $result_tmp_file
+        contents_box_end >> $result_tmp_file
+
+	# 2. Check the user's last access log.
+        contents_box_start $"Check the user's last access log" >> $result_tmp_file
+	  lastlog | grep -v "\*\*" | grep -v $"Username" > $tst_file2
+	  draw_html_table $"Username Port From Week Month Day Hour Timezone Year" $tst_file2 >> $result_tmp_file
+        contents_box_end >> $result_tmp_file
+
+	# 3. Check connected users now
+        contents_box_start $"Check connected users now" >> $result_tmp_file
+          w | grep -v "load average:" | grep -v "PCPU WHAT" > $tst_file3
+	  #root     pts/0    21.20.44.8   14:14    0.00s  0.24s  0.00s w
+	draw_html_table $"USER TTY FROM LOGIN@ IDLE JCPU PCPU WHAT options" $tst_file3 >> $result_tmp_file
+        contents_box_end >> $result_tmp_file
+
+
+	# 4. Check root users and su command users 
+        contents_box_start $"Check root users and su command users" >> $result_tmp_file
+	  cat /var/log/messages | grep pam_ | grep root | grep by | grep -v "by (uid=0)">$tst_file4
+	draw_html_table $"A B C D E F" $tst_file4 >> $result_tmp_file
+        contents_box_end >> $result_tmp_file
+	
+	cat $result_tmp_file >> $result_file_html1
+	$bin_dir/lscp_html_tail contents >> $result_file_html1
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	fi
+	;;
+
+      "--report") #System check (monthly)
+	echo "<table style='border-top: 0px;border-left:0px;'><tr style='border-right: 0px;border-bottom:0px;'><TD width=50 style='border-right: 0px;border-bottom:0px;'></td><td style='border-right: 0px;border-bottom:0px;'>" >> $result_report
+
+
+
+
+
+	cat $result_tmp_file >> $result_report
+echo "</td></tr></table>" >> $result_report
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+

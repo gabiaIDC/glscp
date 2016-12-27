@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# lscp_init -- init and save lscp data.
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+
+# chracter set
+localedef -f UTF-8 -i ko_KR ko_KR.UTF-8
+export LANG=ko_KR.utf8
+export LC_ALL=ko_KR.utf8
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# run each modules 
+i=0
+for module in $conf_lscp_modules ; do 
+  i=$(($i+1))
+  echo -n $"$i.  Initializing  lscp_mod_$module ....."
+  $bin_dir/lscp_mod_$module  --init
+  case $? in
+    0) ## Success
+       echo -e $"\t$green[  OK  ]$white"
+       ;;
+    1) ## Fail
+       echo -e $"\t$red[ FAIL ]$white"
+       ;;
+    2) # Nothing to do
+       echo -e $"\t$blue[ Nothing to do ]$white"
+       ;;
+    3) # Don't create menu
+       echo -e $"\t$blue[ Dont't create menu ]$white"
+       continue
+       ;;
+  esac
+done
+
+## make htaccess 
+   if [ "$conf_htauth" == "yes" ] ; then 
+	echo "
+	   AuthName \"LSCP Check result Page!\"
+	   AuthType Basic
+	   AuthUserFile $rst_html_dir/.htpasswd
+	   AuthGroupFile /dev/null
+	   require valid-user" > $rst_html_dir/.htaccess
+  	$conf_httpd_bin/htpasswd -bc $rst_html_dir/.htpasswd $conf_htuser $conf_htpasswd
+   else
+        rm -f $rst_html_dir/.htaccess
+        rm -f $rst_html_dir/.htpasswd
+   fi
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+# * File Changelog
+#wed Jun 10 14:25:13 2009 Jung, wooyoung  (doly@suidc.com)
+#  make file ! start

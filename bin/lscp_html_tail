@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+type=$1
+name=$2
+title=$3
+
+if [ "$type" == "contents" ] ; then
+  echo "
+          	  <!-- lscp contents end -->
+    	    </td>
+  	  </tr>  
+	</table>
+  "
+fi # if [ "$type" == "contents" ] ; then
+
+if [ "$type" != "list" ] ; then 
+	echo "<br><br><br>"
+	echo "<div align=right>Created by LSCP(<a href=http://lscp.sf.net target=_blank> LSCP.SF.NET</a>)</div>"
+fi
+
+echo "</body>"
+echo "</html>"

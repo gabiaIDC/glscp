@@ -1,0 +1,39 @@
+6 2 * * * rdate -s time.bora.net
+
+05 1 * * * su -l root -c '/home/httpd/rrd/mrtg/src/mrtg.sh'
+05 2 * * * su -l root -c '/home/httpd/packet_rrd/mrtg/src/mrtg.sh'
+01 05 * * * /home/httpd/packet_rrd/mrtg/src/mysql_sync.sh
+
+55 23 * * * cd /home/httpd/rrd/mrtg/src ; ./CheckTrafficMonthly.php
+00 1 * * * cd /home/httpd/rrd/mrtg/src ; ./CheckTraffic.php
+*/5 * * * * /home/httpd/rrd/getLowData/GetLowData.sh
+
+50 2 * * * su -l root -c 'cd /home/backbone_cfg_backup ; perl backup.pl'
+
+50 3 * * * su -l root -c '/home/arptable/script/update.sh'
+
+10 3 * * * su -l root -c '/home/httpd/rrd/log_del.sh' >> /dev/null
+
+30 6 * * * su -l root -c '/data/mysqlbackup.sh' >> /dev/null
+10 7 * * * su -l root -c '/data/make_snapshot.sh' >> /dev/null
+
+
+*/5 * * * * /home/root/mrtg.sh
+25 * * * * /usr/local/php/bin/php /home/httpd/rrd/getLowData/GetRRDData_Minute.php
+40 * * * * /home/httpd/rrd/getLowData/GetHour.sh
+50 0 * * * /home/httpd/rrd/getLowData/GetDay.sh
+
+05 0 * * * su -l root -c '/home/httpd/rrd/getMrtgData/mrtgPartitionManage.php'
+*/5 * * * * su -l root -c '/home/httpd/rrd/getMrtgData/GetMinuteData.php'
+00 7 * * * su -l root -c '/home/httpd/rrd/getMrtgData/logs_del.sh' >> /dev/null
+
+00 12,0 * * * /home/bb/mac_check/mac_check_ddos.sh
+*/5 * * * * /home/bb/mac_check/mac_address_ddos.sh
+
+30 2 * * * /home/httpd/rrd/mrtg/src/hiworks_L4_remake.sh > /dev/null 2>&1
+
+0 0 * * * /usr/bin/perl  /root/ihjang/gabia_ip/gabia_arp.pl
+
+0 3 * * * /bin/sh /home/gajet/ARPstatic_mail.sh
+
+00 01 * * * su -l root -c '/usr/bin/trash-empty 3'

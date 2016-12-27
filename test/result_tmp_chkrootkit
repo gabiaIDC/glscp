@@ -1,0 +1,25 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> chkrootkit을 이용하여 rootkit을 점검...</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<pre>
+
+/usr/lib/.libssl.so.10.hmac /usr/lib/.libcrypto.so.1.0.1e.hmac /usr/lib/.libcrypto.so.10.hmac /usr/lib/.libssl.so.1.0.1e.hmac
+
+</pre>
+<font color=red><b>(Warning)  rootkit을 찾았습니다.</b></font><br>
+<font color=BLUE>Deleted: > You have     2 process hidden for readdir command</font><br>
+<font color=BLUE>Deleted: > You have     2 process hidden for ps command</font><br>
+<font color=BLUE>Deleted: > chkproc: Warning: Possible LKM Trojan installed</font><br>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

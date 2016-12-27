@@ -1,0 +1,53 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 시스템 버전</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+ OS : Linux( , kernel: 2.6.32-642.4.2.el6.x86_64 )
+<br> WEB : Apache/2.2.20 (PHP 5.2.14, 
+<br> DB : MYSQL 5.1.51
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> CPU 정보</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+ Intel(R) Xeon(R) CPU E5-2620 0 @ 2.00GHz( 15360 KB) * 12
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 시스템 가동시간</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+90D 16H 26M
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

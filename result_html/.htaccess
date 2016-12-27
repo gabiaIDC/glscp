@@ -1,0 +1,6 @@
+
+	   AuthName "LSCP Check result Page!"
+	   AuthType Basic
+	   AuthUserFile /usr/local/lscp/result_html/.htpasswd
+	   AuthGroupFile /dev/null
+	   require valid-user

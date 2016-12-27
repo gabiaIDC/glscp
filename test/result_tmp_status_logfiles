@@ -1,0 +1,720 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 시스템 로그파일 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>권한</th>
+<th>링크</th>
+<th>소유자</th>
+<th>그룹</th>
+<th>크기(KByte)</th>
+<th>날짜</th>
+<th>시간</th>
+<th>파일이름</th>
+</tr>
+<tr>
+<td>합계</td>
+<td align=right>46308</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2014-11-07</td>
+<td>15:05</td>
+<td>.cmd.log</td>
+</tr>
+<tr>
+<td>drwxr-xr-x.</td>
+<td align=right>2</td>
+<td>root</td>
+<td>root</td>
+<td align=right>4</td>
+<td>2016-10-01</td>
+<td>03:37</td>
+<td>ConsoleKit</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>10</td>
+<td>2014-10-30</td>
+<td>17:41</td>
+<td>anaconda.ifcfg.log</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>25</td>
+<td>2014-10-30</td>
+<td>17:41</td>
+<td>anaconda.log</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>96</td>
+<td>2014-10-30</td>
+<td>17:41</td>
+<td>anaconda.program.log</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>570</td>
+<td>2014-10-30</td>
+<td>17:41</td>
+<td>anaconda.storage.log</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>126</td>
+<td>2014-10-30</td>
+<td>17:41</td>
+<td>anaconda.syslog</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>36</td>
+<td>2014-10-30</td>
+<td>17:41</td>
+<td>anaconda.xlog</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>51</td>
+<td>2014-10-30</td>
+<td>17:41</td>
+<td>anaconda.yum.log</td>
+</tr>
+<tr>
+<td>drwxr-x---.</td>
+<td align=right>2</td>
+<td>root</td>
+<td>root</td>
+<td align=right>4</td>
+<td>2016-05-11</td>
+<td>15:17</td>
+<td>audit</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>16</td>
+<td>2016-09-27</td>
+<td>15:34</td>
+<td>boot.log</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>utmp</td>
+<td align=right>50</td>
+<td>2016-12-27</td>
+<td>02:45</td>
+<td>btmp</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>utmp</td>
+<td align=right>35</td>
+<td>2016-11-30</td>
+<td>18:02</td>
+<td>btmp-20161201</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>429</td>
+<td>2016-12-27</td>
+<td>08:00</td>
+<td>cron</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>1369</td>
+<td>2016-12-04</td>
+<td>03:30</td>
+<td>cron-20161204</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>1367</td>
+<td>2016-12-11</td>
+<td>03:43</td>
+<td>cron-20161211</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>1366</td>
+<td>2016-12-18</td>
+<td>03:50</td>
+<td>cron-20161218</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>1362</td>
+<td>2016-12-25</td>
+<td>03:24</td>
+<td>cron-20161225</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>75</td>
+<td>2016-09-27</td>
+<td>15:34</td>
+<td>dmesg</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>77</td>
+<td>2016-04-12</td>
+<td>11:35</td>
+<td>dmesg.old</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>197</td>
+<td>2016-11-29</td>
+<td>15:51</td>
+<td>dracut.log</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>36</td>
+<td>2015-10-02</td>
+<td>03:47</td>
+<td>dracut.log-20150101.gz</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>86</td>
+<td>2016-10-07</td>
+<td>03:32</td>
+<td>dracut.log-20151002.gz</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>1145</td>
+<td>2016-10-07</td>
+<td>03:32</td>
+<td>dracut.log-20161007</td>
+</tr>
+<tr>
+<td>-rw-r--r--.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>18594</td>
+<td>2016-12-26</td>
+<td>14:33</td>
+<td>lastlog</td>
+</tr>
+<tr>
+<td>drwxr-xr-x.</td>
+<td align=right>2</td>
+<td>root</td>
+<td>root</td>
+<td align=right>4</td>
+<td>2016-07-13</td>
+<td>00:45</td>
+<td>mail</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>1615</td>
+<td>2016-12-27</td>
+<td>08:00</td>
+<td>maillog</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>5139</td>
+<td>2016-12-04</td>
+<td>03:30</td>
+<td>maillog-20161204</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>5144</td>
+<td>2016-12-11</td>
+<td>03:42</td>
+<td>maillog-20161211</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>5149</td>
+<td>2016-12-18</td>
+<td>03:46</td>
+<td>maillog-20161218</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>5133</td>
+<td>2016-12-25</td>
+<td>03:21</td>
+<td>maillog-20161225</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>840</td>
+<td>2016-12-27</td>
+<td>07:59</td>
+<td>messages</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>2652</td>
+<td>2016-12-04</td>
+<td>03:30</td>
+<td>messages-20161204</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>2860</td>
+<td>2016-12-11</td>
+<td>03:42</td>
+<td>messages-20161211</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>3020</td>
+<td>2016-12-18</td>
+<td>03:49</td>
+<td>messages-20161218</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>2672</td>
+<td>2016-12-25</td>
+<td>03:23</td>
+<td>messages-20161225</td>
+</tr>
+<tr>
+<td>-rw-rw----</td>
+<td align=right>1</td>
+<td>mysql</td>
+<td>root</td>
+<td align=right>2</td>
+<td>2014-11-06</td>
+<td>17:44</td>
+<td>mysqld.log</td>
+</tr>
+<tr>
+<td>drwxr-xr-x</td>
+<td align=right>2</td>
+<td>netdata</td>
+<td>netdata</td>
+<td align=right>4</td>
+<td>2016-12-27</td>
+<td>03:13</td>
+<td>netdata</td>
+</tr>
+<tr>
+<td>drwxr-xr-x.</td>
+<td align=right>2</td>
+<td>ntp</td>
+<td>ntp</td>
+<td align=right>4</td>
+<td>2016-05-31</td>
+<td>19:09</td>
+<td>ntpstats</td>
+</tr>
+<tr>
+<td>drwxr-xr-x.</td>
+<td align=right>2</td>
+<td>root</td>
+<td>root</td>
+<td align=right>4</td>
+<td>2014-10-30</td>
+<td>18:18</td>
+<td>prelink</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>5</td>
+<td>2014-11-19</td>
+<td>09:32</td>
+<td>rsnapshot</td>
+</tr>
+<tr>
+<td>drwxr-xr-x.</td>
+<td align=right>2</td>
+<td>root</td>
+<td>root</td>
+<td align=right>4</td>
+<td>2016-12-27</td>
+<td>00:00</td>
+<td>sa</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2014-10-31</td>
+<td>04:10</td>
+<td>sa-update.log</td>
+</tr>
+<tr>
+<td>drwxr-xr-x</td>
+<td align=right>2</td>
+<td>root</td>
+<td>root</td>
+<td align=right>4</td>
+<td>2016-12-22</td>
+<td>03:29</td>
+<td>salt</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>109</td>
+<td>2016-12-27</td>
+<td>08:00</td>
+<td>secure</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>368</td>
+<td>2016-12-04</td>
+<td>03:30</td>
+<td>secure-20161204</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>372</td>
+<td>2016-12-11</td>
+<td>03:40</td>
+<td>secure-20161211</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>395</td>
+<td>2016-12-18</td>
+<td>03:45</td>
+<td>secure-20161218</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>365</td>
+<td>2016-12-25</td>
+<td>03:20</td>
+<td>secure-20161225</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-12-25</td>
+<td>03:24</td>
+<td>spooler</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-11-27</td>
+<td>03:07</td>
+<td>spooler-20161204</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-12-04</td>
+<td>03:30</td>
+<td>spooler-20161211</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-12-11</td>
+<td>03:43</td>
+<td>spooler-20161218</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-12-18</td>
+<td>03:50</td>
+<td>spooler-20161225</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2014-10-30</td>
+<td>17:37</td>
+<td>tallylog</td>
+</tr>
+<tr>
+<td>-rw-rw-r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>utmp</td>
+<td align=right>348</td>
+<td>2016-12-26</td>
+<td>20:46</td>
+<td>wtmp</td>
+</tr>
+<tr>
+<td>-rw-rw-r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>utmp</td>
+<td align=right>1026</td>
+<td>2016-09-04</td>
+<td>22:58</td>
+<td>wtmp-20160905</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-12-25</td>
+<td>03:24</td>
+<td>xferlog</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-11-27</td>
+<td>03:07</td>
+<td>xferlog-20161204</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-12-04</td>
+<td>03:30</td>
+<td>xferlog-20161211</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-12-11</td>
+<td>03:43</td>
+<td>xferlog-20161218</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td><font color=red>0</font></td>
+<td>2016-12-18</td>
+<td>03:50</td>
+<td>xferlog-20161225</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>28</td>
+<td>2016-12-21</td>
+<td>17:37</td>
+<td>yum.log</td>
+</tr>
+<tr>
+<td>-rw-------.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>26</td>
+<td>2014-11-24</td>
+<td>10:14</td>
+<td>yum.log-20150101</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>29</td>
+<td>2015-12-16</td>
+<td>09:15</td>
+<td>yum.log-20160101</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 웹서버(아파치)로그 파일 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>파일명</th>
+<th>크기(KB)</th>
+</tr>
+<tr>
+<td>/usr/local/apache/logs/access_log</td>
+<td align=right>8771</td>
+</tr>
+<tr>
+<td>/usr/local/apache/logs/access_log</td>
+<td align=right>8771</td>
+</tr>
+<tr>
+<td>/usr/local/apache/logs/access_log</td>
+<td align=right>8771</td>
+</tr>
+<tr>
+<td>/usr/local/apache/logs/error_log</td>
+<td align=right>10038</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

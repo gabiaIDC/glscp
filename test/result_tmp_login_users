@@ -1,0 +1,738 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 사용자 접속내역 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>사용자</th>
+<th>방법</th>
+<th>IP</th>
+<th>주</th>
+<th>월</th>
+<th>일</th>
+<th>시간</th>
+<th>-</th>
+<th>시간</th>
+<th>머문시간</th>
+</tr>
+<tr>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 최근 접속자 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>사용자</th>
+<th>포트</th>
+<th>부터</th>
+<th>주</th>
+<th>월</th>
+<th>일</th>
+<th>시간</th>
+<th>타임존</th>
+<th>년</th>
+</tr>
+<tr>
+<td>사용자이름</td>
+<td>포트</td>
+<td>어디서</td>
+<td>최근정보</td>
+</tr>
+<tr>
+<td>root</td>
+<td>tty1</td>
+<td>화</td>
+<td>11월</td>
+<td align=right>22</td>
+<td>14:22:47</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm0802233</td>
+<td>pts/0</td>
+<td>61.35.204.100</td>
+<td>수</td>
+<td>8월</td>
+<td align=right>10</td>
+<td>10:38:43</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1302448</td>
+<td>pts/6</td>
+<td>61.35.204.100</td>
+<td>월</td>
+<td>11월</td>
+<td align=right>24</td>
+<td>12:24:44</td>
+<td>+0900</td>
+<td align=right>2014</td>
+</tr>
+<tr>
+<td>gw1102294</td>
+<td>pts/0</td>
+<td>61.35.204.100</td>
+<td>화</td>
+<td>8월</td>
+<td align=right>9</td>
+<td>18:36:23</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1102305</td>
+<td>pts/3</td>
+<td>61.35.204.100</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>13</td>
+<td>15:13:25</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1102319</td>
+<td>pts/0</td>
+<td>110.45.165.158</td>
+<td>목</td>
+<td>12월</td>
+<td align=right>22</td>
+<td>16:23:19</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm040279</td>
+<td>pts/3</td>
+<td>110.45.165.130</td>
+<td>수</td>
+<td>12월</td>
+<td align=right>21</td>
+<td>17:35:19</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1302438</td>
+<td>pts/13</td>
+<td>61.35.204.100</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>13</td>
+<td>15:42:44</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1201350</td>
+<td>pts/12</td>
+<td>61.35.204.100</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>13</td>
+<td>15:38:16</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm0702180</td>
+<td>pts/2</td>
+<td>61.35.204.100</td>
+<td>월</td>
+<td>12월</td>
+<td align=right>26</td>
+<td>11:09:11</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1402501</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>수</td>
+<td>12월</td>
+<td align=right>7</td>
+<td>03:10:28</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1302461</td>
+<td>pts/11</td>
+<td>61.35.204.100</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>13</td>
+<td>15:30:01</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1402495</td>
+<td>pts/3</td>
+<td>61.35.204.100</td>
+<td>월</td>
+<td>3월</td>
+<td align=right>16</td>
+<td>17:32:07</td>
+<td>+0900</td>
+<td align=right>2015</td>
+</tr>
+<tr>
+<td>gm0702165</td>
+<td>pts/4</td>
+<td>211.115.83.131</td>
+<td>금</td>
+<td>12월</td>
+<td align=right>16</td>
+<td>11:35:43</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1402553</td>
+<td>pts/0</td>
+<td>61.35.204.100</td>
+<td>목</td>
+<td>7월</td>
+<td align=right>14</td>
+<td>08:49:38</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1202348</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>월</td>
+<td>9월</td>
+<td align=right>12</td>
+<td>17:21:22</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm0902244</td>
+<td>pts/0</td>
+<td>61.35.204.100</td>
+<td>금</td>
+<td>11월</td>
+<td align=right>4</td>
+<td>15:40:38</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1402551</td>
+<td>pts/2</td>
+<td>61.35.204.100</td>
+<td>수</td>
+<td>6월</td>
+<td align=right>29</td>
+<td>14:21:06</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602642</td>
+<td>pts/2</td>
+<td>61.35.204.100</td>
+<td>수</td>
+<td>12월</td>
+<td align=right>21</td>
+<td>13:35:40</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602643</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>20</td>
+<td>10:05:28</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1502603</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>토</td>
+<td>10월</td>
+<td align=right>8</td>
+<td>04:25:30</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1502607</td>
+<td>pts/0</td>
+<td>110.45.165.136</td>
+<td>월</td>
+<td>9월</td>
+<td align=right>26</td>
+<td>09:34:40</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm0502104</td>
+<td>pts/0</td>
+<td>110.45.165.130</td>
+<td>금</td>
+<td>9월</td>
+<td align=right>30</td>
+<td>14:43:05</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1402505</td>
+<td>pts/7</td>
+<td>61.35.204.100</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>13</td>
+<td>15:25:26</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1402496</td>
+<td>pts/1</td>
+<td>211.115.83.131</td>
+<td>월</td>
+<td>12월</td>
+<td align=right>26</td>
+<td>11:06:30</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1301386</td>
+<td>pts/1</td>
+<td>218.38.159.194</td>
+<td>금</td>
+<td>6월</td>
+<td align=right>10</td>
+<td>12:37:22</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1402552</td>
+<td>pts/2</td>
+<td>211.115.83.131</td>
+<td>월</td>
+<td>12월</td>
+<td align=right>26</td>
+<td>14:33:33</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm0802201</td>
+<td>pts/3</td>
+<td>61.35.204.100</td>
+<td>월</td>
+<td>9월</td>
+<td align=right>5</td>
+<td>15:50:46</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1302437</td>
+<td>pts/9</td>
+<td>110.45.165.135</td>
+<td>목</td>
+<td>3월</td>
+<td align=right>26</td>
+<td>11:39:21</td>
+<td>+0900</td>
+<td align=right>2015</td>
+</tr>
+<tr>
+<td>gm1402504</td>
+<td>pts/0</td>
+<td>110.45.165.133</td>
+<td>화</td>
+<td>6월</td>
+<td align=right>21</td>
+<td>11:06:24</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1402506</td>
+<td>pts/6</td>
+<td>218.38.159.194</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>13</td>
+<td>10:42:27</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1002268</td>
+<td>pts/0</td>
+<td>61.35.204.100</td>
+<td>목</td>
+<td>6월</td>
+<td align=right>9</td>
+<td>20:08:51</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1302436</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>월</td>
+<td>12월</td>
+<td align=right>26</td>
+<td>09:48:32</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1201339</td>
+<td>pts/1</td>
+<td>61.35.204.100</td>
+<td>수</td>
+<td>7월</td>
+<td align=right>13</td>
+<td>14:13:21</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602708</td>
+<td>pts/10</td>
+<td>61.35.204.100</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>13</td>
+<td>15:29:28</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602741</td>
+<td>pts/3</td>
+<td>61.35.204.100</td>
+<td>금</td>
+<td>11월</td>
+<td align=right>4</td>
+<td>15:55:09</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602738</td>
+<td>pts/2</td>
+<td>211.115.83.131</td>
+<td>월</td>
+<td>12월</td>
+<td align=right>19</td>
+<td>18:21:03</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602739</td>
+<td>pts/2</td>
+<td>110.45.165.137</td>
+<td>월</td>
+<td>11월</td>
+<td align=right>7</td>
+<td>16:37:39</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602740</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>월</td>
+<td>7월</td>
+<td align=right>25</td>
+<td>09:22:27</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1601728</td>
+<td>pts/2</td>
+<td>218.38.159.194</td>
+<td>금</td>
+<td>12월</td>
+<td align=right>4</td>
+<td>18:15:28</td>
+<td>+0900</td>
+<td align=right>2015</td>
+</tr>
+<tr>
+<td>gm1702754</td>
+<td>pts/1</td>
+<td>211.115.83.131</td>
+<td>금</td>
+<td>12월</td>
+<td align=right>23</td>
+<td>12:10:33</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1401549</td>
+<td>pts/3</td>
+<td>61.35.204.100</td>
+<td>수</td>
+<td>12월</td>
+<td align=right>14</td>
+<td>11:43:43</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1702772</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>월</td>
+<td>11월</td>
+<td align=right>28</td>
+<td>22:27:58</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602735</td>
+<td>pts/4</td>
+<td>61.35.204.100</td>
+<td>목</td>
+<td>5월</td>
+<td align=right>19</td>
+<td>10:19:17</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602737</td>
+<td>pts/0</td>
+<td>218.38.159.194</td>
+<td>일</td>
+<td>5월</td>
+<td align=right>1</td>
+<td>11:37:14</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm030242</td>
+<td>pts/1</td>
+<td>61.35.204.100</td>
+<td>월</td>
+<td>8월</td>
+<td align=right>22</td>
+<td>14:07:03</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1302421</td>
+<td>pts/4</td>
+<td>61.35.204.100</td>
+<td>수</td>
+<td>3월</td>
+<td align=right>30</td>
+<td>13:33:35</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1702790</td>
+<td>pts/2</td>
+<td>211.115.83.131</td>
+<td>화</td>
+<td>12월</td>
+<td align=right>13</td>
+<td>02:34:28</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1702814</td>
+<td>pts/0</td>
+<td>110.45.165.132</td>
+<td>일</td>
+<td>12월</td>
+<td align=right>4</td>
+<td>21:48:26</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1602743</td>
+<td>pts/0</td>
+<td>218.38.159.194</td>
+<td>월</td>
+<td>11월</td>
+<td align=right>28</td>
+<td>10:47:15</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1702844</td>
+<td>pts/2</td>
+<td>110.45.165.132</td>
+<td>금</td>
+<td>11월</td>
+<td align=right>25</td>
+<td>04:18:37</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1702845</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>금</td>
+<td>11월</td>
+<td align=right>18</td>
+<td>05:31:25</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1702854</td>
+<td>pts/0</td>
+<td>110.45.165.130</td>
+<td>일</td>
+<td>12월</td>
+<td align=right>4</td>
+<td>21:49:14</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1702855</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>토</td>
+<td>12월</td>
+<td align=right>17</td>
+<td>04:22:37</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+<tr>
+<td>gm1702856</td>
+<td>pts/0</td>
+<td>211.115.83.131</td>
+<td>목</td>
+<td>12월</td>
+<td align=right>22</td>
+<td>22:59:06</td>
+<td>+0900</td>
+<td align=right>2016</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 현재 사용자 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>사용자</th>
+<th>터미널</th>
+<th>부터</th>
+<th>로그인</th>
+<th>IDLE</th>
+<th>CPU사용</th>
+<th>작업</th>
+<th>옵션들</th>
+</tr>
+<tr>
+<td>root</td>
+<td>tty1</td>
+<td>-</td>
+<td>22Nov16</td>
+<td>34days</td>
+<td>0.04s</td>
+<td>0.02s</td>
+<td>telnet</td>
+<td>192.168.</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> su 명령 사용자 조회</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+<tr>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

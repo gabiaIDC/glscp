@@ -1,0 +1,654 @@
+## define variables
+
+  export PATH=$PATH:/sbin:/usr/sbin
+  export TEXTDOMAIN=lscp
+  export TEXTDOMAINDIR=/usr/share/locale
+
+  ## if redhat ..etc
+  if [ -s /etc/sysconfig/i18n ] ; then 
+     source /etc/sysconfig/i18n
+     export LANG
+  fi
+
+  ## if suse linux 
+  if [ -s /etc/sysconfig/language ] ; then 
+    . /etc/profile.d/lang.sh 
+    export LC_MESSAGES=$LC_CTYPE
+  fi
+  ## if ubuntu  
+  if [ -s /etc/default/locale ] ; then 
+    source /etc/default/locale
+  fi
+  alias ls='ls --time-style=long-iso'
+
+  export CHARSET=`locale | grep LC_MESSAGES|sed "s/.*\.//g"|sed "s/\"//g"`
+  export LANGUAGE=`locale | grep LC_MESSAGES|sed "s/\..*//g"|sed "s/.*=//g" | sed "s/\"//g"`
+
+  export today="`date '+%y.%m.%d'`"
+  export tomonth="`date '+%Y.%m'`"
+
+  ## color 
+  blue="\033[40;34;1m"
+  red="\033[40;31;1m"
+  green="\033[40;32;1m"
+  white="\033[40;37;0m"
+  white_red="\033[41;37;1m"
+  yellow="\033[40;33;1m"
+  yellow_blue="\033[44;33;1m"
+
+  # defile directory
+  syslog_dir=$INST_DIR/syslog
+  tst_dir=$INST_DIR/test
+  rst_html_dir=$INST_DIR/result_html
+  rst_today_html_dir=$INST_DIR/result_html/day_check_$today
+  rst_month_html_dir="$rst_html_dir/report_$tomonth"
+  result_report="$rst_month_html_dir/report.html"
+  file_error_report_cnt=$rst_today_html_dir/error_report_cnt
+  file_error_report=$rst_today_html_dir/error_report_report
+
+
+  bin_dir=$INST_DIR/bin
+  conf_dir=$INST_DIR/conf
+ 
+  
+
+  ## read configure file
+  conf_file=$conf_dir/lscp.conf
+  . $conf_file
+
+
+
+
+
+## Diff web
+ ## diff_web
+function diff_web {
+  diff -B $1 $2 | awk '{
+    if($0 ~ "^>") print "<font color=BLUE>Deleted: "$0"</font><br>"
+    if($0 ~ "^<") print "<font color=RED>Added: "$0"</font><br>"
+  }'
+}
+
+## Diff web_add
+ ## diff_web
+function diff_web_add {
+  diff -B $1 $2 | awk '{
+    if($0 ~ "^<") print "<font color=RED>Added: "$0"</font><br>"
+  }'
+}
+
+
+## Diff text
+function diff_text {
+  diff -B $1 $2 | sed "s/^>/Deleted: /g" | sed "s/^</Added: /g" | grep "^[Added|Deleted]"
+}
+
+## web cat 
+ ## cat_web filename
+function cat_web {
+  echo "<pre>"
+  cat $1
+  echo "</pre>"
+}
+
+
+
+
+## Debug time
+function debug_time {
+  /usr/bin/time -f 'Time: %E, CPU : %P, Memory : %K, I/O : %I / %O' $*
+}
+
+## Draw html table
+function draw_html_table {
+ echo -e "$1 \n `cat $2`" | awk '
+    BEGIN{
+        print "<table>"
+    }
+    {
+     if(NR==1){
+        print "<tr>";
+        for(i=1;i<=NF;i++) print "<th>"$i"</th>";
+        print "</tr>";
+     }else{
+        print "<tr>";
+        for(i=1;i<=NF;i++){
+	  $i=gensub("<fontcolor=","<font color=","g",$i) ;
+	  if(strtonum($i)==$i)print "<td align=right>"$i"</td>";
+	  else print "<td>"$i"</td>";
+        }
+        print "</tr>";
+     }
+    }
+    END{
+        print "</table>"
+    }
+ '
+}
+
+## Draw graph via open flash chart.
+# draw_graph GraphName cnt xName yName Datafile valuename valuename....
+function draw_graph {
+ graphName="$1"
+ cnt="$2"
+ xName="$3"
+ yName="$4"
+ dataFile="$5"
+ valueName1="$6"
+ valueName2="$7"
+ valueName3="$8"
+ valueName4="$9"
+ valueName5="$10"
+
+ cat $dataFile 2> /dev/null| tail -288 | awk -v graphName="$graphName" -v cnt=$cnt -v valueName1="$valueName1" -v xName="$xName" -v yName="$yName" \
+  -v valueName2="$valueName2" -v valueName3="$valueName3" -v valueName4="$valueName4" -v valueName5="$valueName5" \
+ '
+  BEGIN {
+   valueName[1]=valueName1; color[1]="#0000F0";
+   valueName[2]=valueName2; color[2]="#00F0F0"; 
+   valueName[3]=valueName3; color[3]="#000090"; 
+   valueName[4]=valueName4; color[4]="#00F000"; 
+   valueName[5]=valueName5; color[5]="#F090F0";
+   yMin=0;
+   yMax=0;
+
+   printf("{\n");
+   printf(" \"title\": { \"text\": \"%s\"},\n",graphName);
+  }
+  { 
+    for(i=2;i<=cnt+1;i++){
+     if($i<yMin)yMin=$i;
+     if($i>yMax)yMax=$i;
+     if($i=="")$i=0;
+     if(NR==1)values[i-1]=values[i-1]sprintf("\n       {\"x\": %s, \"y\": %s }",$1,$i);
+        else  values[i-1]=values[i-1]sprintf(",\n       {\"x\": %s, \"y\": %s }",$1,$i);
+    }
+  }
+  END {
+   if(yMin=="")yMin=0;
+   if(yName=="%"){yMin=0;yMax=100;}
+   ySteps=(yMax-yMin)/10;
+   printf(" \"x_axis\": { \"grid-colour\": \"#D7E4A3\", \"offset\": true,\"steps\": 3600, \n");
+   printf("     \"labels\": { \"text\": \"#date:H#:#date:i#\",\"steps\":3600, \"visible-steps\":1, \"rotate\":60}},\n");
+   printf(" \"x_legend\": { \"text\": \"%s\", \"style\": \"{font-size: 12px; color: #778877}\"},\n",xName);
+   printf(" \"y_legend\": { \"text\": \"%s\", \"style\": \"{font-size: 12px; color: #778877}\"},\n",yName);
+   printf(" \"y_axis\": { \"min\": %s, \"max\": %s, \"steps\": %f},\n",yMin,yMax,ySteps);
+   printf(" \"elements\": [ \n");
+   for(i=2;i<=cnt+1;i++){
+     printf("  { \n");
+     printf("    \"type\": \"area\",\n");
+     printf("    \"fill\": \"%s\",\n",clolo[i-1]);
+     printf("    \"fill-alpha\": 0.5,\n");
+     printf("    \"values\": [ \n");
+     printf("%s\n",values[i-1]);
+     printf("    ], \n");
+     printf("    \"text\":\"%s\", \"font-size\":12, \"width\":1, \"colour\":\"%s\"\n",valueName[i-1],color[i-1]);
+     if(i!=cnt+1)printf("    },\n");
+      else printf("    }\n");
+       
+
+   } # end of for
+   printf("   ] \n ");
+   printf("} \n ");
+
+  }
+'
+} # end of fuction
+
+## Draw graph via open flash chart. for monthly report.
+# draw_month_graph GraphName cnt xName yName Datafile valuename valuename....
+function draw_month_graph {
+ graphName="$1"
+ cnt="$2"
+ xName="$3"
+ yName="$4"
+ dataFile="$5"
+ valueName1="$6"
+ valueName2="$7"
+ valueName3="$8"
+ valueName4="$9"
+ valueName5="$10"
+
+ cat $dataFile 2> /dev/null | tail -744 | awk -v graphName="$graphName" -v cnt=$cnt -v valueName1="$valueName1" -v xName="$xName" -v yName="$yName" \
+  -v valueName2="$valueName2" -v valueName3="$valueName3" -v valueName4="$valueName4" -v valueName5="$valueName5" \
+ '
+  BEGIN {
+   valueName[1]=valueName1; color[1]="#0000F0";
+   valueName[2]=valueName2; color[2]="#00F0F0"; 
+   valueName[3]=valueName3; color[3]="#000090"; 
+   valueName[4]=valueName4; color[4]="#00F000"; 
+   valueName[5]=valueName5; color[5]="#F090F0";
+   yMin=0;
+   yMax=0;
+
+   printf("{\n");
+   printf(" \"title\": { \"text\": \"%s\"},\n",graphName);
+  }
+  { 
+    for(i=2;i<=cnt+1;i++){
+     if($i<yMin)yMin=$i;
+     if($i>yMax)yMax=$i;
+     if($i=="")$i=0;
+     if(NR==1)values[i-1]=values[i-1]sprintf("\n       {\"x\": %s, \"y\": %s }",$1,$i);
+        else  values[i-1]=values[i-1]sprintf(",\n       {\"x\": %s, \"y\": %s }",$1,$i);
+    }
+  }
+  END {
+   if(yMin=="")yMin=0;
+   if(yName=="%"){yMin=0;yMax=100;}
+   ySteps=(yMax-yMin)/10;
+   printf(" \"x_axis\": { \"grid-colour\": \"#D7E4A3\", \"offset\": true,\"steps\": 86400, \n");
+   printf("     \"labels\": { \"text\": \"#date:j#\",\"steps\":86400, \"visible-steps\":1, \"rotate\":3600}},\n");
+   printf(" \"x_legend\": { \"text\": \"%s\", \"style\": \"{font-size: 12px; color: #778877}\"},\n",xName);
+   printf(" \"y_legend\": { \"text\": \"%s\", \"style\": \"{font-size: 12px; color: #778877}\"},\n",yName);
+   printf(" \"y_axis\": { \"min\": %s, \"max\": %s, \"steps\": %f},\n",yMin,yMax,ySteps);
+   printf(" \"elements\": [ \n");
+   for(i=2;i<=cnt+1;i++){
+     printf("  { \n");
+     printf("    \"type\": \"area\",\n");
+     printf("    \"fill\": \"%s\",\n",clolo[i-1]);
+     printf("    \"fill-alpha\": 0.5,\n");
+     printf("    \"values\": [ \n");
+     printf("%s\n",values[i-1]);
+     printf("    ], \n");
+     printf("    \"text\":\"%s\", \"font-size\":12, \"width\":1, \"colour\":\"%s\"\n",valueName[i-1],color[i-1]);
+     if(i!=cnt+1)printf("    },\n");
+      else printf("    }\n");
+   } # end of for
+   printf("   ] \n ");
+   printf("} \n ");
+  }
+'
+} # end of fuction
+
+
+
+
+
+
+## Contents box start
+# contents_box_start "title"
+function contents_box_start {
+    title="$1"
+
+             echo "
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> $title</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             "
+}
+
+
+
+
+## Contents box end
+# contents_box_end
+function contents_box_end {
+             echo "
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             "
+}
+
+
+## function :func_getDomains httpd.conf FindString 
+## info : find Domain in httpd.conf via func_getDomains
+## etc : find Domain in apache configure file
+function func_getDomains  {
+  file_httpd="$1"
+  findStr="$2"
+  ServerRoot=`grep "ServerRoot" $file_httpd | grep -vi " *#" | cut -d\  -f 2| sed 's/\"//g'`
+  includes=`grep  -vi " *#"  $file_httpd | grep -i "include" | cut -d\   -f 2`
+  for inc in $includes ; do
+    echo "$inc" | grep "^\/" &> /dev/null
+    if [ "$?" == "0" ] ; then  # if Relative path
+       inc_file="/$inc" 
+    else 
+       inc_file="$ServerRoot/$inc" 
+    fi
+    func_getDomain $inc_file $findStr
+  done
+  func_getDomain $file_httpd $findStr
+}
+
+
+
+## function :func_getDomain httpd.conf FindString 
+## info : find Domain in httpd.conf
+## etc : find Domain in apache configure file
+function func_getDomain  {
+  cat $1 | awk -v user="$2" '
+  BEGIN { start=0;tmp=""; }
+        {   if ($0 !~ "^#"){
+                if ($0 ~ ".*<VirtualHost *.")start=1;
+                if ($0 ~ ".*</VirtualHost *."){
+                        tmp=sprintf("%s\n%s",tmp,$0);
+                        start=0;
+                        if (index(tmp,user)) print tmp;
+                        tmp="";
+                }
+          }
+          if (start==1) tmp=sprintf("%s\n%s",tmp,$0);
+        }
+  ' | grep "Server" | grep -v "@" | awk '{
+    print "<a href=http://"$2" target=_blank> "$2"</a><br>";
+    if(NF>=2){
+      for(i=3;i<=NF;i++) print "<a href=http://"$i" target=_blank> "$i"</a><br>";
+    }
+  }' | sed "s/www\.//g" | sort -u 2>/dev/null
+}
+
+
+
+## function :func_getUsersInfo [HTML|TEXT]
+## info : get information system users
+## etc : only show  UID 500 ~ 65533 users
+function func_getUsersInfo  {
+  # $1 : view method :  HTML | TEXT
+  if [ "$1" == "HTML" ] ; then
+    echo "<table>"
+    echo $"  <tr><th>User</th><th>Domain</th><th>Disk</th><th>DB</th><th>MAIL</th><th>Last login</th><th>logined IP</th></tr>"
+  else
+    echo -e " User \t Domain \t Disk \t DB \t MAIL \t Last login \t Logined IP"
+  fi
+
+  USERS="`cat /etc/passwd | awk -F: '{if($3>=500&&$3<65534)printf $1" "}'`"
+  for user in $USERS ; do
+    domains=""
+    disk_used=""
+    db_used=""
+    mail_used=""
+
+    domains=`func_getDomains $conf_httpd_conf "/$user/"`
+    homedir=`cat /etc/passwd | grep -w $user | awk -F: '{print $6}'`
+    if [ -d $homedir ] ; then
+      disk_used=`du -sh $homedir | awk '{print $1}'`
+    else
+      disk_used="&nbsp;"
+    fi
+    if [ -d /usr/local/mysql/data/$user ] ; then
+      db_used=`du -sh /usr/local/mysql/data/$user | awk '{print $1}'`
+    else
+      db_used="&nbsp;"
+    fi
+    if [ -e /var/spool/mail/$user ] ; then
+      mail_used=`du -sh /var/spool/mail/$user | awk '{print $1}'`
+    else
+      mail_used="&nbsp;"
+    fi
+    LANG=en
+    lastlog_time=`lastlog -u $user|grep -v 'in**' |  grep -w $user | awk '{print $9"-"$5"-"$6"("$4") "$7}'`
+    lastlog_ip=`lastlog -u $user | grep -v 'in**' | grep -w $user | awk '{print $3}'`
+
+    if [ "$1" == "HTML" ] ; then
+      echo -e "<tr bgcolor=white><td>$user</td><td>$domains</td><td>$disk_used</td><td>$db_used</td><td>$mail_used</td><td>$lastlog_time</td><td>$lastlog_ip</td></tr>"
+    else
+      echo -e "$user \t $domains \t $disk_used \t $db_used \t  $mail_used \t  $lastlog_time \t $lastlog_ip "
+    fi
+  done ## end of for user
+  if [ "$1" == "HTML" ] ; then
+    echo "</table>"
+  fi
+
+} ## end of function
+
+
+## function :func_getUptime
+## info :  get system uptime.
+function func_getUptime  {
+  cat /proc/uptime | awk '{
+  day=int($1/86400);
+  time=int(($1-day*86400)/3600);
+  minute=int(($1-day*86400-time*3600)/60);
+  print day"D "time"H "minute"M";
+  }'
+} ## end of function
+
+
+
+## function :func_getWEBInfo 
+## info : get web server informations.  
+## etc : get web server version and PHP, Zend Optimizer version 
+function func_getWEBInfo  {
+  if [ -f "/usr/local/apache/bin/httpd" ] ; then
+   /usr/local/apache/bin/httpd -v | grep Apache | awk '{printf $3" "}'
+  fi
+  if [ -f "/usr/local/bin/php" ] ; then
+    php_bin="/usr/local/bin/php"
+  fi
+  if [ -f "/usr/local/php/bin/php" ] ; then
+    php_bin="/usr/local/php/bin/php"
+  fi
+   $php_bin -v 2> /dev/null| grep "^PHP" | awk '{printf "(" $1" "$2", "}'
+   $php_bin -v 2> /dev/null| grep Optimizer | awk '{printf $2" "$3" "$4")"}' | sed "s/,//g"
+  echo ""
+} ## end of function
+
+## function :func_getDBInfo 
+## info : get DB server version
+function func_getDBInfo  {
+  if [ -f "/usr/local/mysql/bin/mysql" ] ; then
+   /usr/local/mysql/bin/mysql --version | awk '{print "MYSQL "$5}' | sed "s/,//g"
+  fi
+} ## end of function
+
+
+## function :func_getOSInfo 
+## info : get OS version
+function func_getOSInfo  {
+  cat /proc/version | awk '{
+   str=$1"( ";
+   if($0~".*Red Hat 3.4.5-2.*")str=str"SULinux 1.0 Server ";
+   if($0~".*Red Hat Linux 3.3.3-7.*")str=str"Fedora Core 2 ";
+   if($0~".*Red Hat 3.4.4-2.*")str=str"Fedora Core 3 ";
+   if($0~".*Red Hat 4.1.1-1.*")str=str"Fedora Core 5 ";
+   str=str", kernel: "$3;
+   str=str" )";
+   print str; 
+  }'
+} ## end of function
+
+
+
+## function :func_getCPUInfo 
+## info : get CPU informations
+## etc : CPU click, count, cash size.
+function func_getCPUInfo  {
+  cat /proc/cpuinfo | awk -F: '
+  {
+   if($1 ~ ".*model name.*"){cpucount=cpucount+1;model=$2;}
+   if($1 ~ ".*cache size.*") cache=$2
+  }
+  END{
+   if(model ~ ".*Xeon.*") cpucount=cpucount/2;
+   if(model ~ ".*XEON.*") cpucount=cpucount/2;
+   if(model ~ ".*Pentium\\(R\\) 4.*") cpucount=1;
+   print model"("cache") * "cpucount;
+  }
+  '
+} ## end of function 
+
+## function :func_getMEMInfo
+## info : get memory informations
+## etc : get memory information
+function func_getMEMInfo  {
+ free -m | grep "Mem:" | awk '{print $2"M"}'
+} ## end of function
+  
+  
+## function :func_getDISKInfo
+## info : get DISK informations
+## etc : get DISK capacity, count
+function func_getDISKInfo  {
+ fdisk -l | grep "Disk" | awk '{print $3$4}' | sed "s/,//g" | sort | uniq -c | awk '{print $2" * "$1}'
+} ## end of function
+
+
+## function :func_getUptime
+## info : get system uptime.
+function func_getUptime  {
+  cat /proc/uptime | awk '{
+  day=int($1/86400);
+  time=int(($1-day*86400)/3600);
+  minute=int(($1-day*86400-time*3600)/60);
+  print day"D "time"H "minute"M";
+  }'
+} ## end of function
+
+## function :func_getDomainCnt
+## info : get count of Domains.
+## etc : Set on the web to find out the number of domains. 
+function func_getDomainCnt  {
+  file_httpd="$1"
+  domainCnt=0
+  ServerRoot=`grep "ServerRoot" $file_httpd | grep -vi " *#" | cut -d\  -f 2| sed 's/\"//g'`
+  includes=`grep  -vi " *#"  $file_httpd | grep -i "include" | cut -d\   -f 2`
+  for inc in $includes ; do
+    echo "$inc" | grep "^\/" &> /dev/null
+    if [ "$?" == "0" ] ; then  # if Relative path
+       inc_file="/$inc"
+    else
+       inc_file="$ServerRoot/$inc"
+    fi
+    tmp_cnt=`grep  -vi " *#"  $inc_file | grep ServerName|wc -l`
+    domainCnt=$((tmp_cnt+domainCnt))
+  done
+  tmp_cnt=`grep  -vi " *#"  $file_httpd | grep ServerName|wc -l`
+  domainCnt=$((tmp_cnt+domainCnt))
+  echo $domainCnt
+} ## end of function
+
+## function :func_getUserCnt
+## info : Set of users to find out.
+## etc : UID length is 500 ~ 65533.
+function func_getUserCnt  {
+  cat /etc/passwd | awk -F: '{if($3>=500&&$3<65534)print $1}' | wc -l
+} ## end of function
+
+
+## function :func_getNETInfo [IP|GW|SN|BC|DNS]
+## info :  get network information
+## etc : IP, gateway(GW), subnet mask(SN), boardcast(BC), nameserver(DNS) 
+function func_getNETInfo {
+  case $1 in
+    "IP")
+    ifconfig | grep "inet addr" | grep -v "127.0.0.1" | awk '{print $2}' | sed "s/addr://g"
+    ;;
+    "GW")
+    route -n | grep "^0.0.0.0" | awk '{print $2}'
+    ;;
+    "SN")
+    ifconfig | grep Mask | grep -v "127.0.0.1" | awk '{print $4}' | sed "s/Mask://g"
+    ;;
+    "BC")
+    ifconfig | grep Bcast | grep -v "127.0.0.1" | awk '{print $3}' | sed "s/Bcast://g"
+    ;;
+    "DNS")
+    cat /etc/resolv.conf | grep "nameserver" | awk '{print $2}'
+    ;;
+  esac
+} ## end of function
+
+
+## function :func_report_module_run NO ModuleName
+## info :  run module for report
+## etc : for report.
+function func_report_module_run {
+    i=$1 
+    module=$2
+    flag=""
+    for m in $conf_lscp_modules ; do 
+      if [ "$m" == "$module" ] ; then flag="ON" ; fi
+    done
+    if [ "$flag" == "ON" ] ; then
+      echo -n $"$i.  Create Report lscp_mod_$module ..... "
+      $bin_dir/lscp_mod_$module  --report
+      case $? in
+         0) ## Success
+            echo -e $"\t$green[  OK  ]$white"
+            ;;
+         1) ## Fail
+            echo -e $"\t$red[ FAIL ]$white"
+            ;;
+         2) # Nothing to do
+            echo -e $"\t$blue[ Nothing to do ]$white"
+            ;;
+         3) # Don't create menu
+            echo -e $"\t$blue[ Dont't create menu ]$white"
+            continue
+            ;;
+      esac
+    else 
+      echo -e "$i. $red SKIP $white Report lscp_mod_$module because user configuration."
+    fi # end of if [ "$flag" == "ON" ] ; then
+} 
+
+## function :func_mail_to SUBJECT TO FILENAME
+## info : send mail HTML type 
+## etc : for error report
+function func_mail_to {
+  SUBJECT="$1"
+  TO="$2"
+  FILENAME="$3"
+  (
+	echo "From: root@$HOSTNAME"
+	echo "To: $TO "
+	echo "MIME-Version: 1.0"
+	echo "Content-Type: multipart/alternative; " 
+	echo ' boundary="WOO09122.1893048294/woo0.org"' 
+	echo "Subject: $SUBJECT" 
+	echo "" 
+	echo "This is a MIME-encapsulated message" 
+	echo "" 
+	echo "--WOO09122.1893048294/woo0.org" 
+        if [ "$CHARSET" == "UTF-8" ] ; then
+          echo "Content-Type: text/html; charset=utf-8"
+        else
+          echo "Content-Type: text/html"
+        fi
+	echo "" 
+	cat $FILENAME
+	echo "--WOO09122.1893048294/woo0.org"
+  ) | sendmail -t
+} # end of function func_mail_to {
+
+
+## function : func_err_report_title SUBJECT 
+## info : Number is given title automatically. start number is 1.
+## etc : This function is for the error report.
+function func_err_report_title {
+  SUBJECT="$1"
+
+  	if [ ! -f "$file_error_report_cnt" ] ; then 
+    	  number=1
+  	  echo "$number" > $file_error_report_cnt
+  	else
+    	  number="`cat $file_error_report_cnt`"
+    	  number=$((number+1))
+    	  echo "$number" > $file_error_report_cnt
+  	fi
+	
+	echo " &nbsp; &nbsp; <H3>$number. $SUBJECT </H3>"
+
+} # end of function func_mail_to {
+
+## function : func_err_msg MESSAGE
+## info : Error messages are output as html.
+## etc : This function is for the error report.
+function func_err_msg {
+  MESSAGE="$1"
+  	echo "<font color=red><b>(Warning) $MESSAGE</b></font><br>"
+} # end of function func_err_msg {
+
+
+
+
+
+

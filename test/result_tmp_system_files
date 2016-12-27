@@ -1,0 +1,406 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 주요 파일 사이즈, 권한 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>파일명</th>
+<th>크기</th>
+<th>권한</th>
+</tr>
+<tr>
+<td>/bin/chgrp</td>
+<td align=right>55</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/chmod</td>
+<td align=right>52</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/chown</td>
+<td align=right>57</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/cp</td>
+<td align=right>121</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/df</td>
+<td align=right>93</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/ln</td>
+<td align=right>49</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/login</td>
+<td align=right>31</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/ls</td>
+<td align=right>115</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/mkdir</td>
+<td align=right>49</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/mknod</td>
+<td align=right>33</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/mv</td>
+<td align=right>111</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/netstat</td>
+<td align=right>126</td>
+<td>-rwx------</td>
+</tr>
+<tr>
+<td>/bin/ps</td>
+<td align=right>88</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/rm</td>
+<td align=right>57</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/rmdir</td>
+<td align=right>40</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/su</td>
+<td align=right>35</td>
+<td>-rwsr-xr-x</td>
+</tr>
+<tr>
+<td>/bin/touch</td>
+<td align=right>52</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/etc/fstab</td>
+<td align=right>2</td>
+<td>-rw-r--r--</td>
+</tr>
+<tr>
+<td>/etc/inittab</td>
+<td align=right>1</td>
+<td>-rw-r--r--</td>
+</tr>
+<tr>
+<td>/etc/rc.d/rc</td>
+<td align=right>3</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/etc/services</td>
+<td align=right>626</td>
+<td>-rw-r--r--.</td>
+</tr>
+<tr>
+<td>/sbin/ifconfig</td>
+<td align=right>73</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/sbin/init</td>
+<td align=right>147</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/sbin/telinit</td>
+<td align=right>51</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/c++</td>
+<td align=right>265</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/chattr</td>
+<td align=right>14</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/crontab</td>
+<td align=right>51</td>
+<td>-rwsr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/find</td>
+<td align=right>1</td>
+<td>lrwxrwxrwx</td>
+</tr>
+<tr>
+<td>/usr/bin/g++</td>
+<td align=right>265</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/gcc</td>
+<td align=right>262</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/lsattr</td>
+<td align=right>13</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/make</td>
+<td align=right>170</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/passwd</td>
+<td align=right>31</td>
+<td>-rwsr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/pstree</td>
+<td align=right>24</td>
+<td>-rwx------</td>
+</tr>
+<tr>
+<td>/usr/bin/ssh</td>
+<td align=right>441</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/top</td>
+<td align=right>67</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/w</td>
+<td align=right>17</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/wget</td>
+<td align=right>359</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/bin/who</td>
+<td align=right>48</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/sbin/lsof</td>
+<td align=right>155</td>
+<td>-rwxr-xr-x</td>
+</tr>
+<tr>
+<td>/usr/sbin/sendmail</td>
+<td align=right>1</td>
+<td>lrwxrwxrwx</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA>  시스템 주요 파일 속성 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>파일명</th>
+<th>속성</th>
+</tr>
+<tr>
+<td>/bin/chgrp</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/chmod</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/chown</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/cp</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/df</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/ln</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/login</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/ls</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/mkdir</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/mknod</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/mv</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/netstat</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/ps</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/rm</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/rmdir</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/su</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/bin/touch</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/etc/fstab</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/etc/inittab</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/etc/rc.d/rc</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/etc/services</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/sbin/ifconfig</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/sbin/init</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/sbin/telinit</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/c++</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/chattr</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/crontab</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/g++</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/gcc</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/lsattr</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/make</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/passwd</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/pstree</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/ssh</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/top</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/w</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/wget</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/bin/who</td>
+<td>-------------e-</td>
+</tr>
+<tr>
+<td>/usr/sbin/lsof</td>
+<td>-------------e-</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

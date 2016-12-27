@@ -1,0 +1,147 @@
+#!/bin/bash
+
+# lscp_mod_init_scripts -- check init scripts(lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/init_scripts.html"
+result_tmp_file="$tst_dir/result_tmp_init_scripts"
+
+sys_file1="$syslog_dir/lscp_mod_init_scripts1"
+sys_file2="$syslog_dir/lscp_mod_init_scripts2"
+sys_file3="$syslog_dir/lscp_mod_init_scripts3"
+sys_file4="$syslog_dir/lscp_mod_init_scripts4"
+tst_file1="$tst_dir/lscp_mod_init_scripts1"
+tst_file2="$tst_dir/lscp_mod_init_scripts2"
+tst_file3="$tst_dir/lscp_mod_init_scripts3"
+tst_file4="$tst_dir/lscp_mod_init_scripts4"
+tst_filet="$tst_dir/lscp_mod_init_scripts_tmp"
+
+
+case $option in 
+      "--init") #Initializaion
+	# save init scripts
+ 	ls -Al --time-style=long-iso /etc/init.d/ > $sys_file1
+ 	ls -Al --time-style=long-iso /etc/xinetd.d/ 2> /dev/null > $sys_file2
+ 	cat /etc/rc.d/rc.local 2> /dev/null > $sys_file3
+ 	ls -Al --time-style=long-iso /etc/rc.d/rc.sysinit 2> /dev/null > $sys_file4
+	;;
+
+      "--test") #Test
+        exit 2
+	;;
+
+      "--check") #System check  (daily)
+	# run head file
+	$bin_dir/lscp_html_head contents $"init_scripts" $"Check Scripts of LSCP" $"check init.d, xinetd.d, rc.local..."> $result_file_html1
+	
+	# check init scripts
+ 	ls -Al --time-style=long-iso /etc/init.d/ > $tst_file1
+ 	ls -Al --time-style=long-iso /etc/xinetd.d/ 2> /dev/null > $tst_file2
+ 	cat /etc/rc.d/rc.local 2> /dev/null > $tst_file3
+ 	ls -Al --time-style=long-iso /etc/rc.d/rc.sysinit 2> /dev/null > $tst_file4
+
+        contents_box_start $"/etc/init.d" > $result_tmp_file
+	draw_html_table $"Permission Link Owner Group Size(KByte) Date Time Filename" $tst_file1 >> $result_tmp_file
+	diff_web $tst_file1 $sys_file1 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $"Init scripts(init.d) are modified." >> $file_error_report
+          func_err_msg $" Init scripts(init.d) are modified." | tee -a $file_error_report >> $result_tmp_file
+          cat $tst_filet | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_filet" ] ; then
+        contents_box_end >> $result_tmp_file
+        contents_box_start $"/etc/xinetd.d" >> $result_tmp_file
+	draw_html_table $"Permission Link Owner Group Size(KByte) Date Time Filename" $tst_file2 >> $result_tmp_file
+	diff_web $tst_file2 $sys_file2 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $"Init scripts(xinitd.d) are modified." >> $file_error_report
+          func_err_msg $" Init scripts(xinitd.d) are modified." | tee -a $file_error_report >> $result_tmp_file
+          cat $tst_filet | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_filet" ] ; then
+        contents_box_end >> $result_tmp_file
+
+        contents_box_start $"/etc/rc.d/rc.local" >> $result_tmp_file
+	cat_web $tst_file3 >> $result_tmp_file
+	diff_web $tst_file3 $sys_file3 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $"Init script(rc.local) are modified." >> $file_error_report
+          func_err_msg $" Init script(rc.local) are modified." | tee -a $file_error_report >> $result_tmp_file
+          cat $tst_filet | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_filet" ] ; then
+        contents_box_end >> $result_tmp_file
+
+        contents_box_start $"/etc/rc.d/rc.sysinit" >> $result_tmp_file
+	draw_html_table $"Permission Link Owner Group Size(KByte) Date Time Filename" $tst_file4 >> $result_tmp_file
+	diff_web $tst_file4 $sys_file4 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $" Init script(rc.sysinit) are modified." >> $file_error_report
+          func_err_msg $" Init script(rc.sysinit) are modified." | tee -a $file_error_report >> $result_tmp_file
+          cat $tst_filet | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_filet" ] ; then
+        contents_box_end >> $result_tmp_file
+
+	cat $result_tmp_file >> $result_file_html1
+	$bin_dir/lscp_html_tail contents >> $result_file_html1
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	fi
+	if [ "$error_occur" == "1" ] ; then exit 4 ; else exit 0 ; fi
+	;;
+
+      "--report") #System check (monthly)
+	cat $result_tmp_file >> $result_report
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+

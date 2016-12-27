@@ -1,0 +1,128 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 리눅스 방화벽(Iptables) 점검</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<pre>
+Chain INPUT (policy DROP)
+target     prot opt source               destination         
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0           state INVALID 
+ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           state RELATED,ESTABLISHED 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0           
+ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           tcp dpt:113 
+BLOCK_INPUT  all  --  0.0.0.0/0            0.0.0.0/0           
+GABIA_INPUT  all  --  0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+GABIA_OUTPUT  all  --  0.0.0.0/0            0.0.0.0/0           
+
+Chain BLOCK_INPUT (1 references)
+target     prot opt source               destination         
+DROP       tcp  --  211.38.27.8          211.234.100.242     tcp spts:1024:65535 dpt:80 
+DROP       all  --  101.106.25.105       211.234.100.242     
+
+Chain GABIA_INPUT (1 references)
+target     prot opt source               destination         
+ACCEPT     icmp --  0.0.0.0/0            211.234.100.242     
+ACCEPT     tcp  --  211.115.83.128/26    211.234.100.242     tcp 
+ACCEPT     udp  --  211.115.83.128/26    211.234.100.242     udp 
+ACCEPT     tcp  --  110.45.165.128/26    211.234.100.242     tcp 
+ACCEPT     udp  --  110.45.165.128/26    211.234.100.242     udp 
+ACCEPT     tcp  --  121.125.65.196       211.234.100.242     tcp 
+ACCEPT     udp  --  121.125.65.196       211.234.100.242     udp 
+ACCEPT     tcp  --  218.38.159.192/29    211.234.100.242     tcp 
+ACCEPT     udp  --  218.38.159.192/29    211.234.100.242     udp 
+ACCEPT     tcp  --  222.231.30.201       211.234.100.242     tcp 
+ACCEPT     udp  --  222.231.30.201       211.234.100.242     udp 
+ACCEPT     tcp  --  121.254.172.5        211.234.100.242     tcp 
+ACCEPT     udp  --  121.254.172.5        211.234.100.242     udp 
+ACCEPT     tcp  --  211.172.246.15       211.234.100.242     tcp 
+ACCEPT     udp  --  211.172.246.15       211.234.100.242     udp 
+ACCEPT     tcp  --  61.35.204.100        211.234.100.242     tcp 
+ACCEPT     udp  --  61.35.204.100        211.234.100.242     udp 
+ACCEPT     tcp  --  114.200.216.2        211.234.100.242     tcp 
+ACCEPT     udp  --  114.200.216.2        211.234.100.242     udp 
+ACCEPT     tcp  --  211.115.83.192/26    211.234.100.242     tcp 
+ACCEPT     udp  --  211.115.83.192/26    211.234.100.242     udp 
+ACCEPT     tcp  --  222.231.30.194       211.234.100.242     tcp spts:1024:65535 dpt:80 
+ACCEPT     tcp  --  211.43.203.214       211.234.100.242     tcp spts:1024:65535 dpt:80 
+ACCEPT     tcp  --  221.38.159.192/29    211.234.100.242     tcp spts:1024:65535 dpt:80 
+ACCEPT     tcp  --  211.234.124.30       211.234.100.242     tcp spts:1024:65535 dpt:80 
+ACCEPT     tcp  --  211.237.15.2         211.234.100.242     tcp spts:1024:65535 dpt:80 
+ACCEPT     udp  --  211.234.124.40       211.234.100.242     udp dpt:161 
+ACCEPT     tcp  --  211.234.124.40       211.234.100.242     tcp dpt:161 
+ACCEPT     tcp  --  211.115.89.250       211.234.100.242     tcp dpt:873 
+ACCEPT     tcp  --  110.45.183.23        211.234.100.242     tcp dpt:873 
+ACCEPT     tcp  --  211.115.83.232       211.234.100.242     tcp dpt:873 
+ACCEPT     tcp  --  211.43.203.231       211.234.100.242     tcp dpt:873 
+ACCEPT     udp  --  0.0.0.0/0            211.234.100.242     udp spts:161:65535 dpts:1024:65535 
+ACCEPT     udp  --  0.0.0.0/0            211.234.100.242     udp dpt:123 
+ACCEPT     udp  --  0.0.0.0/0            211.234.100.242     udp dpt:514 
+ACCEPT     udp  --  182.162.137.26       211.234.100.242     udp 
+ACCEPT     udp  --  182.162.137.27       211.234.100.242     udp 
+ACCEPT     udp  --  211.234.100.12       211.234.100.242     udp 
+ACCEPT     udp  --  211.234.100.13       211.234.100.242     udp 
+ACCEPT     tcp  --  182.162.137.68       211.234.100.242     tcp dpt:3306 
+ACCEPT     tcp  --  0.0.0.0/0            211.234.100.242     tcp spt:53 
+ACCEPT     udp  --  0.0.0.0/0            211.234.100.242     udp spt:53 
+
+Chain GABIA_OUTPUT (1 references)
+target     prot opt source               destination         
+ACCEPT     udp  --  0.0.0.0/0            110.45.183.17       udp dpt:514 
+ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           tcp dpt:161 
+ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:161 
+ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0           tcp dpt:53 
+ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:53 
+ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0           udp dpt:25 
+</pre>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> Tcpwrapper (hosts.deny)</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<pre>
+</pre>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> Tcpwrapper (hosts.allow)</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<pre>
+</pre>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

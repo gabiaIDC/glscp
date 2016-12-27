@@ -1,0 +1,108 @@
+#!/bin/bash
+
+# lscp_mod_chkrootkit -- check rootkit via chkrootkit(lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/chkrootkit.html"
+result_tmp_file="$tst_dir/result_tmp_chkrootkit"
+
+sys_file1="$syslog_dir/lscp_mod_chkrootkit"
+
+tst_file1="$tst_dir/lscp_mod_chkrootkit1"
+tst_file2="$tst_dir/lscp_mod_chkrootkit2"
+tst_filet="$tst_dir/lscp_mod_chkrootkit_tmp"
+
+
+case $option in 
+      "--init") #Initializaion
+	# check rootkit and save it's result. 
+	cd $bin_dir &> /dev/null
+	./chkrootkit -q > $sys_file1
+	cd - &> /dev/null
+	exit 0
+	;;
+
+      "--test") #Test
+        exit 2
+	;;
+
+      "--check") #System check  (daily)
+	# run head fill
+	$bin_dir/lscp_html_head contents $"chkrootkit" $"Check rootkit of LSCP" $"Check rootkit via chkrootkit..."> $result_file_html1
+	
+	# check rootkit and save it's result. 
+	cd $bin_dir
+	./chkrootkit -q > $tst_file1
+	cd - &> /dev/null
+
+	contents_box_start $"Check rootkit via chkrootkit" > $result_tmp_file
+	cat_web $tst_file1>> $result_tmp_file
+	diff_web $tst_file1 $sys_file1 > $tst_filet
+        if [ -s "$tst_filet" ] ; then
+	  error_occur=1
+          func_err_report_title $"rootkit found." >> $file_error_report
+          func_err_msg $" rootkit found." | tee -a $file_error_report >> $result_tmp_file
+          cat $tst_filet | tee -a $file_error_report >> $result_tmp_file
+        fi # if [ -s "$tst_filet" ] ; then
+	contents_box_end >> $result_tmp_file
+	cat $result_tmp_file >> $result_file_html1
+
+
+	$bin_dir/lscp_html_tail  contents  >> $result_file_html1
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	fi	
+	if [ "$error_occur" == "1" ] ; then exit 4 ; else exit 0 ; fi
+	;;
+
+      "--report") #System check (monthly)
+	 cat $result_tmp_file >> $result_report
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac

@@ -1,0 +1,795 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> crontab -l</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>분</th>
+<th>시</th>
+<th>일</th>
+<th>월</th>
+<th>주</th>
+<th>명령어</th>
+</tr>
+<tr>
+<td align=right>6</td>
+<td align=right>2</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>rdate</td>
+<td>-s</td>
+<td>time.bora.net</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td>05</td>
+<td align=right>1</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/home/httpd/rrd/mrtg/src/mrtg.sh'</td>
+</tr>
+<tr>
+<td>05</td>
+<td align=right>2</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/home/httpd/packet_rrd/mrtg/src/mrtg.sh'</td>
+</tr>
+<tr>
+<td>01</td>
+<td>05</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/home/httpd/packet_rrd/mrtg/src/mysql_sync.sh</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>55</td>
+<td align=right>23</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>cd</td>
+<td>/home/httpd/rrd/mrtg/src</td>
+<td>;</td>
+<td>./CheckTrafficMonthly.php</td>
+</tr>
+<tr>
+<td>00</td>
+<td align=right>1</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>cd</td>
+<td>/home/httpd/rrd/mrtg/src</td>
+<td>;</td>
+<td>./CheckTraffic.php</td>
+</tr>
+<tr>
+<td>*/5</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/home/httpd/rrd/getLowData/GetLowData.sh</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>50</td>
+<td align=right>2</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'cd</td>
+<td>/home/backbone_cfg_backup</td>
+<td>;</td>
+<td>perl</td>
+<td>backup.pl'</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>50</td>
+<td align=right>3</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/home/arptable/script/update.sh'</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>10</td>
+<td align=right>3</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/home/httpd/rrd/log_del.sh'</td>
+<td>>></td>
+<td>/dev/null</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>30</td>
+<td align=right>6</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/data/mysqlbackup.sh'</td>
+<td>>></td>
+<td>/dev/null</td>
+</tr>
+<tr>
+<td align=right>10</td>
+<td align=right>7</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/data/make_snapshot.sh'</td>
+<td>>></td>
+<td>/dev/null</td>
+</tr>
+<tr>
+</tr>
+<tr>
+</tr>
+<tr>
+<td>*/5</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/home/root/mrtg.sh</td>
+</tr>
+<tr>
+<td align=right>25</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/usr/local/php/bin/php</td>
+<td>/home/httpd/rrd/getLowData/GetRRDData_Minute.php</td>
+</tr>
+<tr>
+<td align=right>40</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/home/httpd/rrd/getLowData/GetHour.sh</td>
+</tr>
+<tr>
+<td align=right>50</td>
+<td align=right>0</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/home/httpd/rrd/getLowData/GetDay.sh</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td>05</td>
+<td align=right>0</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/home/httpd/rrd/getMrtgData/mrtgPartitionManage.php'</td>
+</tr>
+<tr>
+<td>*/5</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/home/httpd/rrd/getMrtgData/GetMinuteData.php'</td>
+</tr>
+<tr>
+<td>00</td>
+<td align=right>7</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/home/httpd/rrd/getMrtgData/logs_del.sh'</td>
+<td>>></td>
+<td>/dev/null</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td>00</td>
+<td>12,0</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/home/bb/mac_check/mac_check_ddos.sh</td>
+</tr>
+<tr>
+<td>*/5</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/home/bb/mac_check/mac_address_ddos.sh</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>30</td>
+<td align=right>2</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/home/httpd/rrd/mrtg/src/hiworks_L4_remake.sh</td>
+<td>></td>
+<td>/dev/null</td>
+<td>2>&1</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>0</td>
+<td align=right>0</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/usr/bin/perl</td>
+<td>/root/ihjang/gabia_ip/gabia_arp.pl</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>0</td>
+<td align=right>3</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>/bin/sh</td>
+<td>/home/gajet/ARPstatic_mail.sh</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td>00</td>
+<td>01</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>su</td>
+<td>-l</td>
+<td>root</td>
+<td>-c</td>
+<td>'/usr/bin/trash-empty</td>
+<td>3'</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> /etc/crontab</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>분</th>
+<th>시</th>
+<th>일</th>
+<th>월</th>
+<th>주</th>
+<th>사용자</th>
+<th>명령어</th>
+</tr>
+<tr>
+<td>SHELL=/bin/bash</td>
+</tr>
+<tr>
+<td>PATH=/sbin:/bin:/usr/sbin:/usr/bin</td>
+</tr>
+<tr>
+<td>MAILTO=root</td>
+</tr>
+<tr>
+<td>HOME=/</td>
+</tr>
+<tr>
+</tr>
+<tr>
+</tr>
+<tr>
+</tr>
+<tr>
+<td>01</td>
+<td>00</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>root</td>
+<td>rdate</td>
+<td>-su</td>
+<td>time.bora.net</td>
+<td>|</td>
+<td>clock</td>
+<td>-w</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td>00</td>
+<td align=right>10</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>root</td>
+<td>/usr/bin/trash-empty</td>
+<td align=right>3</td>
+</tr>
+<tr>
+<td>00</td>
+<td align=right>10</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>root</td>
+<td>su</td>
+<td>-l</td>
+<td>bb</td>
+<td>-c</td>
+<td>/usr/bin/trash-empty</td>
+<td align=right>1</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>0</td>
+<td>09</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>root</td>
+<td>/usr/local/lscp/bin/getLSCPReport.sh</td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td align=right>5</td>
+<td>09</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>root</td>
+<td>/usr/local/src/netdata/netdata-updater.sh</td>
+<td>-f</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> /etc/crond.hourly</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>권한</th>
+<th>링크</th>
+<th>소유자</th>
+<th>그룹</th>
+<th>크기(KByte)</th>
+<th>날짜</th>
+<th>시간</th>
+<th>파일이름</th>
+</tr>
+<tr>
+<td>합계</td>
+<td align=right>4</td>
+</tr>
+<tr>
+<td>-rwxr-xr-x</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>409</td>
+<td>2016-08-24</td>
+<td>03:36</td>
+<td>0anacron</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> /etc/crond.daily</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>권한</th>
+<th>링크</th>
+<th>소유자</th>
+<th>그룹</th>
+<th>크기(KByte)</th>
+<th>날짜</th>
+<th>시간</th>
+<th>파일이름</th>
+</tr>
+<tr>
+<td>합계</td>
+<td align=right>28</td>
+</tr>
+<tr>
+<td>-rwxr-xr-x.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>206</td>
+<td>2014-10-30</td>
+<td>18:12</td>
+<td>logrotate</td>
+</tr>
+<tr>
+<td>-rwx------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>180</td>
+<td>2003-07-10</td>
+<td>04:36</td>
+<td>logrotate.rpmnew</td>
+</tr>
+<tr>
+<td>-rwxr-xr-x.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>905</td>
+<td>2013-02-22</td>
+<td>11:13</td>
+<td>makewhatis.cron</td>
+</tr>
+<tr>
+<td>-rwx------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>189</td>
+<td>2015-01-26</td>
+<td>19:48</td>
+<td>mlocate.cron</td>
+</tr>
+<tr>
+<td>-rwxr-xr-x.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>2126</td>
+<td>2013-07-19</td>
+<td>23:35</td>
+<td>prelink</td>
+</tr>
+<tr>
+<td>-rwxr-xr-x.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>563</td>
+<td>2013-11-23</td>
+<td>22:52</td>
+<td>readahead.cron</td>
+</tr>
+<tr>
+<td>-rwxr-xr-x</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>433</td>
+<td>2015-11-07</td>
+<td>03:34</td>
+<td>tmpwatch</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> /etc/crond.weekly</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>권한</th>
+<th>링크</th>
+<th>소유자</th>
+<th>그룹</th>
+<th>크기(KByte)</th>
+<th>날짜</th>
+<th>시간</th>
+<th>파일이름</th>
+</tr>
+<tr>
+<td>합계</td>
+<td align=right>0</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> /etc/crond.monthly</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>권한</th>
+<th>링크</th>
+<th>소유자</th>
+<th>그룹</th>
+<th>크기(KByte)</th>
+<th>날짜</th>
+<th>시간</th>
+<th>파일이름</th>
+</tr>
+<tr>
+<td>합계</td>
+<td align=right>4</td>
+</tr>
+<tr>
+<td>-rwxr-xr-x.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>111</td>
+<td>2013-11-23</td>
+<td>22:52</td>
+<td>readahead-monthly.cron</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> /etc/cron.d</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>권한</th>
+<th>링크</th>
+<th>소유자</th>
+<th>그룹</th>
+<th>크기(KByte)</th>
+<th>날짜</th>
+<th>시간</th>
+<th>파일이름</th>
+</tr>
+<tr>
+<td>합계</td>
+<td align=right>24</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>113</td>
+<td>2016-08-24</td>
+<td>03:36</td>
+<td>0hourly</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>60</td>
+<td>2016-08-08</td>
+<td>18:54</td>
+<td>lscp</td>
+</tr>
+<tr>
+<td>-rw-r--r--</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>139</td>
+<td>2016-05-11</td>
+<td>17:17</td>
+<td>mrtg</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>108</td>
+<td>2016-06-22</td>
+<td>00:41</td>
+<td>raid-check</td>
+</tr>
+<tr>
+<td>-rw-r--r--.</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>459</td>
+<td>2013-12-05</td>
+<td>22:35</td>
+<td>sa-update</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>235</td>
+<td>2016-05-11</td>
+<td>11:02</td>
+<td>sysstat</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> /var/spool/cron</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+<table>
+<tr>
+<th>권한</th>
+<th>링크</th>
+<th>소유자</th>
+<th>그룹</th>
+<th>크기(KByte)</th>
+<th>날짜</th>
+<th>시간</th>
+<th>파일이름</th>
+</tr>
+<tr>
+<td>합계</td>
+<td align=right>8</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>bb</td>
+<td>bb</td>
+<td align=right>46</td>
+<td>2015-06-19</td>
+<td>16:51</td>
+<td>bb</td>
+</tr>
+<tr>
+<td>-rw-------</td>
+<td align=right>1</td>
+<td>root</td>
+<td>root</td>
+<td align=right>2041</td>
+<td>2016-02-16</td>
+<td>10:05</td>
+<td>root</td>
+</tr>
+</table>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

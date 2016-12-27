@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# lscp_mod_status_bigfiles -- bigfiles check (lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/status_bigfiles.html"
+result_tmp_file="$tst_dir/result_tmp_bigfiles"
+
+tst_file1="$tst_dir/lscp_mod_status_bigfiles"
+
+
+case $option in 
+      "--init") #Initializaion
+        exit 2
+	;;
+
+      "--test") #Test
+        exit 2
+	;;
+
+      "--check") #System check  (daily)
+	# run head file
+	$bin_dir/lscp_html_head contents $"status_bigfiles" $"Big file list" $"Over ${conf_min_big_file_size}M files" > $result_file_html1
+	
+	# find big files
+	find /  -not -path  "/proc/*"  -a -not -path  "/sys/*" -a -not -path  "/var/named/chroot/proc/*"  -size +${conf_min_big_file_size}M -exec ls -lk --time-style=long-iso {} \; 2>/dev/null > $tst_file1
+	contents_box_start $"Big file list" > $result_tmp_file
+	draw_html_table $"Permission Link Owner Group Size(KByte) Date Time Filename" $tst_file1 >> $result_tmp_file
+	contents_box_end >> $result_tmp_file
+	cat $result_tmp_file >> $result_file_html1
+
+  	$bin_dir/lscp_html_tail contents >> $result_file_html1
+
+
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	fi
+	;;
+
+      "--report") #System check (monthly)
+	cat $result_tmp_file >> $result_report
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+

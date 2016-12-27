@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# lscp_module_interface -- lscp module interface.
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+
+case $option in 
+      "--init") #Initializaion
+	echo $"Initializaion" 
+	;;
+      "--test") #Test
+	echo $"Test" 
+	;;
+      "--check") #System check  (daily)
+	echo $"System check (daily)" 
+	;;
+      "--report") #System check (monthly)
+	echo $"System check (monthly)" 
+	;;
+      "--self-test") #Self test
+	echo $"Self test" 
+	;;
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+
+
+
+
+
+
+
+
+
+
+# * File Changelog
+#wed Jun 10 14:25:13 2009 Jung, wooyoung  (doly@suidc.com)
+#  make file ! start

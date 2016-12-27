@@ -1,0 +1,185 @@
+#!/bin/bash
+
+# lscp_mod_resource_disk -- draw disk resource graph  (lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/resource_disk.html"
+result_tmp_file="$tst_dir/result_tmp_resource_disk"
+
+tmp_file_erase="$tst_dir/lscp_mod_resource_graph_erase"
+
+
+sys_file1="$syslog_dir/lscp_mod_resource_disk"
+
+tst_file1="$tst_dir/lscp_mod_resource_disk"
+tst_file2="$tst_dir/lscp_mod_resource_disk2"
+tstr_file1="$tst_dir/lscp_mod_resourcer_disk"
+
+dat_file1="$rst_today_html_dir/resource_graph_disk"
+datr_file1="$rst_month_html_dir/resource_graphr_disk"
+
+# Text message encoding change UTF-8 in graph.
+if [ "$CHARSET" != "UTF-8" ] ; then
+   export LANG=${LANGUAGE}.UTF-8
+fi
+     m_time="`gettext -s "Time"`"
+     m_total="`gettext -s "Total"`"
+     m_usages="`gettext -s "Usages"`"
+if [ "$CHARSET" != "UTF-8" ] ; then
+   export LANG=${LANGUAGE}.$CHARSET
+fi
+
+
+
+
+case $option in 
+      "--init") #Initializaion
+	# save /etc/fstab file
+	cat /etc/fstab > $sys_file1
+	;;
+
+      "--test") #Test
+	#### 1. save each partion size 
+        now_date="`date '+%s'`"
+  	df -lmP | grep -v Filesystem | awk -v now_date=$now_date -v tst_file1="$tst_file1" '{
+    	   printf("%s %s %s\n",now_date, $2/1024, $3/1024) >> tst_file1""gensub("/","_","g",$6);
+        }'
+        for i in `df -lP |grep -v Filesystem | awk '{print gensub("/","_","g",$6)}'` ; do
+	   i_path="`echo $i|sed 's/_/\//g'`"
+           draw_graph "$i_path" 2 "$m_time" "GByte" ${tst_file1}${i} "$m_total" "$m_usages" > ${dat_file1}${i}
+        done
+
+        # if result file no exigest 
+        if [ ! -f $result_file_html1 ] ; then
+          $bin_dir/lscp_html_head contents $"resource_disk" $"Resource Disk usages graph of LSCP" $"each partions ....." > $result_file_html1
+	  # check each partion usages 
+	  df -lhP | grep -v "Filesystem" | awk '{print $1" "$6" "$2" "$3" "$5}' > $tst_file1
+	  # check the file system size over 90%
+	  df -lhP | grep -v "Filesystem" | awk '{if(strtonum($5)>=90)print $1" "$6" "$2" "$3" <fontcolor=red>"$5"</font>"}' > $tst_file2
+          contents_box_start $"Disk Usages" > $result_tmp_file 
+          draw_html_table $"Filesystem Mounted Total Used Use%" $tst_file1 >> $result_tmp_file
+	  if [ -s $tst_file2 ] ; then  # If you use more than 90% 
+	     func_err_msg $"There are more than 90% of the file system." >> $result_tmp_file
+             draw_html_table $"Filesystem Mounted Total Used Use%" $tst_file2 >> $result_tmp_file
+	  fi
+          contents_box_end >> $result_tmp_file
+	  cat $result_tmp_file >> $result_file_html1
+          echo '<script type="text/javascript" src="../js/swfobject.js"></script>' >> $result_file_html1
+          for i in `df -lP |grep -v Filesystem | awk '{print gensub("/","_","g",$6)}'` ; do
+	     i_path="`echo $i|sed 's/_/\//g'`"
+             echo "<script type=\"text/javascript\">swfobject.embedSWF(\"../open-flash-chart.swf\", \"lscp$i\", \"600\", \"250\",\"9.0.0\", \"expressInstall.swf\",{\"data-file\":\"resource_graph_disk$i\"} );</script>" >> $result_file_html1
+             contents_box_start "$i_path" >> $result_file_html1
+             echo "<div id=\"lscp$i\"></div><br><br>" >> $result_file_html1
+             contents_box_end >> $result_file_html1
+          done
+            
+          $bin_dir/lscp_html_tail contents >> $result_file_html1
+        fi # end of if [ ! -f $result_file_html1 ] ; then
+
+        ## save data for monthly report.
+        if [ "`date '+%M'`" == "00" ] ; then
+          for i in `df -lP |grep -v Filesystem | awk '{print gensub("/","_","g",$6)}'` ; do
+            tail -1 ${tst_file1}${i} >> ${tstr_file1}${i}
+          done
+        fi
+	
+
+	;;
+
+      "--check") #System check  (daily)
+        for i in `ls -t ${tst_file1}_*` ; do
+          cat $i | tail -288 > $tmp_file_erase
+          cat $tmp_file_erase > $i
+        done
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	else
+	   # check the file system size over 90%
+	   df -lhP | grep -v "Filesystem" | awk '{if(strtonum($5)>=90)print $1" "$6" "$2" "$3" <fontcolor=red>"$5"</font>"}' > $tst_file2
+	   if [ -s $tst_file2 ] ; then
+	     func_err_report_title $"Not enough disk space" >> $file_error_report
+	     func_err_msg $"There are more than 90% of the file system." >> $file_error_report
+             draw_html_table $"Filesystem Mounted Total Used Use%" $tst_file2 >>$file_error_report 
+             exit 4
+	   else 
+             exit 0
+	   fi
+	fi
+	;;
+
+      "--report") #System check (monthly)
+	echo "<table style='border-top: 0px;border-left:0px;'><tr style='border-right: 0px;border-bottom:0px;'><TD width=50 style='border-right: 0px;border-bottom:0px;'></td><td style='border-right: 0px;border-bottom:0px;'>" >> $result_report
+	echo $"<H3> 2.7.1. Disk usages</H3>" >> $result_report
+	cat $result_tmp_file >> $result_report
+
+        for i in `df -lP |grep -v Filesystem | awk '{print gensub("/","_","g",$6)}'` ; do
+	   i_path="`echo $i|sed 's/_/\//g'`"
+           draw_month_graph "$i_path" 2 "$m_time" "GByte" ${tstr_file1}${i} "$m_total" "$m_usages" > ${datr_file1}${i}
+        done
+	# check each partion usages 
+        cnt=1
+        echo '<script type="text/javascript" src="../js/swfobject.js"></script>' >> $result_report
+        for i in `df -lP |grep -v Filesystem | awk '{print gensub("/","_","g",$6)}'` ; do
+	     cnt=$((cnt+1)) 
+	     i_path="`echo $i|sed 's/_/\//g'`"
+             echo "<script type=\"text/javascript\">swfobject.embedSWF(\"../open-flash-chart.swf\", \"lscp$i\", \"800\", \"400\",\"9.0.0\", \"expressInstall.swf\",{\"data-file\":\"resource_graphr_disk$i\"} );</script>" >> $result_report
+             #contents_box_start "$i_path" >> $result_report
+	     echo $"<H3> 2.7.$cnt. $i_path partition usages </H3>" >> $result_report
+             echo "<div id=\"lscp$i\"></div><br><br>" >> $result_report
+             #contents_box_end >> $result_report
+        done # end of for i in `df -lP |grep -v Filesystem | awk '{print gensub("/","_","g",$6)}'` ; do
+	echo "</td></tr></table>" >> $result_report
+            
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+
+
+

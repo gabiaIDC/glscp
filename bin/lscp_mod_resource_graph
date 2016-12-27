@@ -1,0 +1,260 @@
+#!/bin/bash
+
+# lscp_mod_resource_graph -- draw resource graph (lscp module)
+# 
+# Copyright (C) 2009 Superuser Korea, Co., Ltd.  www.linux.co.kr
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+
+# read  file common file / directory fix, read config file
+INST_DIR=/usr/local/lscp
+common_lib=$INST_DIR/lib/common
+. $common_lib
+
+# read options 
+option="$1"
+if [ "$2" == "--debug" ] ; then 
+  DEBUG="YES"
+fi
+
+#
+result_file_html1="$rst_today_html_dir/resource_graph.html"
+
+tst_file[1]="$tst_dir/lscp_mod_resource_graph_loadavg"
+tst_file[2]="$tst_dir/lscp_mod_resource_graph_load"
+tst_file[3]="$tst_dir/lscp_mod_resource_graph_proc"
+tst_file[4]="$tst_dir/lscp_mod_resource_graph_traffic"
+tst_file[5]="$tst_dir/lscp_mod_resource_graph_mem"
+tst_file[6]="$tst_dir/lscp_mod_resource_graph_swap"
+
+tstr_file[1]="$tst_dir/lscp_mod_resource_graphr_loadavg"
+tstr_file[2]="$tst_dir/lscp_mod_resource_graphr_load"
+tstr_file[3]="$tst_dir/lscp_mod_resource_graphr_proc"
+tstr_file[4]="$tst_dir/lscp_mod_resource_graphr_traffic"
+tstr_file[5]="$tst_dir/lscp_mod_resource_graphr_mem"
+tstr_file[6]="$tst_dir/lscp_mod_resource_graphr_swap"
+
+tmp_file_in="$tst_dir/lscp_mod_resource_graph_traffic_in"
+tmp_file_out="$tst_dir/lscp_mod_resource_graph_traffic_out"
+tmp_file_erase="$tst_dir/lscp_mod_resource_graph_erase"
+
+dat_file[1]="$rst_today_html_dir/resource_graph_loadavg.dat"
+dat_file[2]="$rst_today_html_dir/resource_graph_load.dat"
+dat_file[3]="$rst_today_html_dir/resource_graph_proc.dat"
+dat_file[4]="$rst_today_html_dir/resource_graph_traffic.dat"
+dat_file[5]="$rst_today_html_dir/resource_graph_mem.dat"
+dat_file[6]="$rst_today_html_dir/resource_graph_swap.dat"
+
+datr_file[1]="$rst_month_html_dir/resource_graphr_loadavg.dat"
+datr_file[2]="$rst_month_html_dir/resource_graphr_load.dat"
+datr_file[3]="$rst_month_html_dir/resource_graphr_proc.dat"
+datr_file[4]="$rst_month_html_dir/resource_graphr_traffic.dat"
+datr_file[5]="$rst_month_html_dir/resource_graphr_mem.dat"
+datr_file[6]="$rst_month_html_dir/resource_graphr_swap.dat"
+
+# Text message encoding change UTF-8 in graph.
+if [ "$CHARSET" != "UTF-8" ] ; then 
+   export LANG=${LANGUAGE}.UTF-8
+fi
+     m_loadAvg="`gettext -s "LoadAvg"`"
+     m_time="`gettext -s "Time"`"
+     m_load="`gettext -s "Load"`"
+     m_minute1="`gettext -s "1 minute"`"
+     m_minute5="`gettext -s "5 minute"`"
+     m_minute15="`gettext -s "15 minute"`"
+     m_loadPct="`gettext -s "LoadPct"`"  
+     m_users="`gettext -s "Users"`"
+     m_system="`gettext -s "System"`"
+     m_cpu="`gettext -s "CPU"`"
+     m_io="`gettext -s "IO"`"
+     m_processCount="`gettext -s "Process Count"`"
+     m_count="`gettext -s "Count"`"
+     m_traffic="`gettext -s "Traffic"`"
+     m_in="`gettext -s "IN"`"
+     m_out="`gettext -s "OUT"`"
+     m_memoryUsages="`gettext -s "Memory Usages"`"
+     m_total="`gettext -s "Total"`"
+     m_used="`gettext -s "Used"`"
+     m_buffer="`gettext -s "Buffer"`"
+     m_cached="`gettext -s "Cached"`"
+     m_swapUsages="`gettext -s "Swap Usages"`"
+if [ "$CHARSET" != "UTF-8" ] ; then 
+   export LANG=${LANGUAGE}.$CHARSET
+fi
+   
+
+
+
+case $option in 
+      "--init") #Initializaion
+        exit 2
+	;;
+
+      "--test") #Test
+	
+	#### 1. loadavg 
+	echo "`date '+%s'` `cut -d ' ' -f 1-3 /proc/loadavg`" >> ${tst_file[1]}
+
+        draw_graph "$m_loadAvg" 3 "$m_time" "$m_load" ${tst_file[1]} "$m_minute1" "$m_minute5" "$m_minute15" > ${dat_file[1]}
+
+	#### 2.  load 2
+	echo "`date '+%s'` `vmstat 1 2 | tail -1 | awk '{ print $13" "$14" "100-$15" "$16}'`" >> ${tst_file[2]}
+        draw_graph "$m_loadPct" 4 "$m_time" "%" ${tst_file[2]} "$m_users" "$m_system" "$m_cpu" "$m_io" > ${dat_file[2]}
+
+	#### 3.  process cnt
+	echo -n "`date '+%s'` " >> ${tst_file[3]}
+        cnt=0;
+        for process in $conf_graph_process ; do
+         cnt=$((cnt+1))
+         cnt_procs="`pstree -p | grep -w $process | wc -l`"
+         echo -n "$cnt_procs " >> ${tst_file[3]}
+        done
+        echo "" >> ${tst_file[3]}
+        draw_graph "$m_processCount" $cnt "$m_time" "$m_count" ${tst_file[3]} $conf_graph_process > ${dat_file[3]}
+
+	#### 4.  traffic
+	in_start="`cat $tmp_file_in 2>/dev/null`"
+	out_start="`cat $tmp_file_out 2>/dev/null`"
+	in_end=`cat /proc/net/dev | grep $conf_graph_eth_dev| awk -F: '{print $2}'| awk '{print $1 }'`
+	out_end=`cat /proc/net/dev | grep $conf_graph_eth_dev | awk -F: '{print $2}'| awk '{print $9}'`
+	echo "$in_end" > $tmp_file_in
+	echo "$out_end" > $tmp_file_out
+
+	in_traffic=`$bin_dir/cal_traffic $in_start $in_end 300`
+	out_traffic=`$bin_dir/cal_traffic $out_start $out_end 300`
+
+	echo "`date '+%s'` $in_traffic $out_traffic" >> ${tst_file[4]}
+        draw_graph "$m_traffic" 2 "$m_time" "KBit/Sec" ${tst_file[4]} "$m_in" "$m_out" > ${dat_file[4]}
+	
+
+	#### 5.  RAM  // Total Used Buffers Cached 
+	echo -n "`date '+%s'` " >> ${tst_file[5]}
+	free -k| grep Mem | awk '{print $2/1024" "$3/1024" "$6/1024" "$7/1024}' >> ${tst_file[5]}
+        draw_graph "$m_memoryUsages" 4 "$m_time" "Mbytes" ${tst_file[5]} "$m_total" "$m_used" "$m_buffer" "$m_cached" > ${dat_file[5]}
+	
+
+	#### 6.  Swap // Total Used 
+	echo -n "`date '+%s'` " >> ${tst_file[6]}
+	free -k| grep Swap | awk '{print $2/1024" "$3/1024}' >> ${tst_file[6]}
+        draw_graph "$m_swapUsages" 2 "$m_time" "Mbytes" ${tst_file[6]} "$m_total" "$m_used" > ${dat_file[6]}
+
+
+	# if result file no exigest 
+        if [ ! -f $result_file_html1 ] ; then
+	  $bin_dir/lscp_html_head contents $"resource_graph" $"Resource Graph of LSCP" $"cpu, ram, traffic....." > $result_file_html1
+          echo '<script type="text/javascript" src="../js/swfobject.js"></script>' >> $result_file_html1
+          for i in loadavg load proc traffic mem swap ; do
+	     echo "<script type=\"text/javascript\">swfobject.embedSWF(\"../open-flash-chart.swf\", \"lscp_$i\", \"600\", \"250\",\"9.0.0\", \"expressInstall.swf\",{\"data-file\":\"resource_graph_$i.dat\"} );</script>" >> $result_file_html1
+	     contents_box_start "$i" >> $result_file_html1
+	     echo "<div id=\"lscp_$i\"></div><br><br>" >> $result_file_html1
+	     contents_box_end >> $result_file_html1
+	  done
+            
+	  $bin_dir/lscp_html_tail contents "resource_graph" "Resource Graph of LSCP" >> $result_file_html1
+          
+        fi
+	## save data for monthly report.
+	if [ "`date '+%M'`" == "00" ] ; then 
+	  for ((i=1;i<=6;i++)) ; do 
+	    tail -1 ${tst_file[$i]} >> ${tstr_file[$i]} 
+	  done
+	fi	
+
+
+	;;
+
+      "--check") #System check  (daily)
+	# erase over 288 line in data.
+	for ((i=1;i<=6;i++)) ; do 
+	  cat ${tst_file[$i]} | tail -288 > $tmp_file_erase
+	  cat $tmp_file_erase > ${tst_file[$i]} 
+ 	done
+	if [ "$DEBUG" == "YES" ] ; then 
+          cat $result_file_html1 
+	else
+          exit 2
+	fi
+	;;
+
+      "--report") #System check (monthly)
+	#### 1. loadavg 
+	title[1]=$"<H2> &nbsp; &nbsp; 2.1. Load average</H2>"
+        draw_month_graph "$m_loadAvg" 3 "$m_time" "$m_load" ${tstr_file[1]} "$m_minute1" "$m_minute5" "$m_minute15" > ${datr_file[1]}
+
+	#### 2.  load 2
+	title[2]=$"<H2> &nbsp; &nbsp; 2.2. Load </H2>"
+        draw_month_graph "$m_loadPct" 4 "$m_time" "%" ${tstr_file[2]} "$m_users" "$m_system" "$m_cpu" "$m_io" > ${datr_file[2]}
+
+	#### 3.  process cnt
+	title[3]=$"<H2> &nbsp; &nbsp; 2.3. Process count </H2>"
+        cnt=`echo "$conf_graph_process" | wc -w`
+        draw_month_graph "$m_processCount" $cnt "$m_time" "$m_count" ${tstr_file[3]} $conf_graph_process> ${datr_file[3]}
+
+	#### 4.  traffic
+	title[4]=$"<H2> &nbsp; &nbsp; 2.4. Network Traffic </H2>"
+        draw_month_graph "$m_traffic" 2 "$m_time" "KBit/Sec" ${tstr_file[4]} "$m_in" "$m_out" > ${datr_file[4]}
+	
+	#### 5.  RAM  // Total Used Buffers Cached 
+	title[5]=$"<H2> &nbsp; &nbsp; 2.5. Memory usages</H2>"
+        draw_month_graph "$m_memoryUsages" 4 "$m_time" "Mbytes" ${tstr_file[5]} "$m_total" "$m_used" "$m_buffer" "$m_cached" > ${datr_file[5]}
+	
+	#### 6.  Swap // Total Used 
+	title[6]=$"<H2> &nbsp; &nbsp; 2.6. SWAP usages</H2>"
+        draw_month_graph "$m_swapUsages" 2 "$m_time" "Mbytes" ${tst_file[6]} "$m_total" "$m_used" > ${datr_file[6]}
+
+        echo '<script type="text/javascript" src="../js/swfobject.js"></script>' >> $result_report
+	cnt=0
+        for i in loadavg load proc traffic mem swap ; do
+	    cnt=$((cnt+1))
+	     echo "<script type=\"text/javascript\">swfobject.embedSWF(\"../open-flash-chart.swf\", \"lscp_$i\", \"800\", \"400\",\"9.0.0\", \"expressInstall.swf\",{\"data-file\":\"resource_graphr_$i.dat\"} );</script>" >> $result_report
+	     echo ${title[$cnt]} >> $result_report
+	     #contents_box_start "$i" >> $result_report
+       	     echo "<table style='border-top: 0px;border-left:0px;'><tr style='border-right: 0px;border-bottom:0px;'><TD width=50 style='border-right: 0px;border-bottom:0px;'></td><td style='border-right: 0px;border-bottom:0px;'>" >> $result_report
+	     echo "<div id=\"lscp_$i\"></div><br><br>" >> $result_report
+	     #contents_box_end >> $result_report
+             echo "</td></tr></table>" >> $result_report
+	done
+	for ((i=1;i<=6;i++)) ; do 
+	  cat ${tstr_file[$i]} | tail -744 > $tmp_file_erase
+	  cat $tmp_file_erase > ${tstr_file[$i]} 
+ 	done
+
+
+	;;
+
+      "--self-test") #Self test
+	echo $"Self test" 
+	debug_time  $0 --check --debug
+	
+	;;
+
+      *) #Wrong execution
+	echo ""
+	echo $"Usage: lscp_module_interface [OPTION]"
+        echo $"Options :"
+        echo $"  --init : Initialization, Save the initial DB. (invoked from lscp_init)"
+        echo $"  --test : Collect informations, Draw the graph.(invoked from lscp_cron)"
+        echo $"  --check : System check (daily), Draw the graph, Write the result. (invoked from lscp_cron)"
+        echo $"  --report : System check (monthly), Draw the graph, Write the result (invoked from lscp_cron)"
+        echo $"  --self-test : Self test, check running time, debugging mod"
+	echo ""
+	exit 1
+	;;
+	
+esac
+
+
+
+
+

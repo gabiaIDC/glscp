@@ -1,0 +1,20 @@
+
+      <table>
+        <tr>
+           <td background=/images/barBg.gif><font color=#0EB2EA> 오류 보고</font></td>
+        </tr>
+        <tr>
+          <td height=50>
+          <!-- lscp box contents start -->
+             
+ &nbsp; &nbsp; <H3>1. 시스템 주요 파일이 변경되었습니다. </H3>
+<font color=red><b>(Warning)  시스템 주요 파일이 변경되었습니다.</b></font><br>
+<font color=RED>Added: < /bin/login 31 -rwxr-xr-x</font><br>
+<font color=BLUE>Deleted: > /bin/login 25 -rwxr-xr-x</font><br>
+
+          <!-- lscp graph end -->
+          </td>
+        </tr>
+      </table>
+        <br><br>
+             

@@ -1,0 +1,6 @@
+
+/usr/lib/.libssl.so.10.hmac /usr/lib/.libcrypto.so.1.0.1e.hmac /usr/lib/.libcrypto.so.10.hmac /usr/lib/.libssl.so.1.0.1e.hmac
+
+You have     2 process hidden for readdir command
+You have     2 process hidden for ps command
+chkproc: Warning: Possible LKM Trojan installed
